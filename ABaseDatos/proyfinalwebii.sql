@@ -3,7 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-06-2026 a las 21:13:07
+
+-- Tiempo de generación: 09-06-2026 a las 20:53:51
+
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -112,6 +114,22 @@ CREATE TABLE `categorias` (
   `nombre` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `categorias`
+--
+
+INSERT INTO `categorias` (`id`, `nombre`) VALUES
+(4, 'Accesorios'),
+(7, 'Audifonos'),
+(10, 'Camaras'),
+(2, 'Celulares'),
+(5, 'Impresoras'),
+(1, 'Laptops'),
+(3, 'Monitores'),
+(9, 'Mouse'),
+(6, 'Tablets'),
+(8, 'Teclados');
+
 -- --------------------------------------------------------
 
 --
@@ -140,6 +158,22 @@ CREATE TABLE `marcas` (
   `id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `marcas`
+--
+
+INSERT INTO `marcas` (`id`, `nombre`) VALUES
+(5, 'Acer'),
+(7, 'Apple'),
+(4, 'Asus'),
+(2, 'Dell'),
+(1, 'HP'),
+(3, 'Lenovo'),
+(9, 'Logitech'),
+(6, 'Samsung'),
+(10, 'Sony'),
+(8, 'Xiaomi');
 
 -- --------------------------------------------------------
 
@@ -219,6 +253,22 @@ CREATE TABLE `productos` (
   `precio_venta` decimal(12,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `productos`
+--
+
+INSERT INTO `productos` (`id`, `subcategoria_id`, `marca_id`, `estado_id`, `codigo`, `nombre`, `descripcion`, `precio_compra`, `precio_venta`) VALUES
+(1, 4, 7, 1, 'PROD1', 'Producto 1', 'Descripcion del producto 1', 496.00, 803.00),
+(2, 7, 7, 1, 'PROD2', 'Producto 2', 'Descripcion del producto 2', 195.00, 752.00),
+(3, 8, 3, 1, 'PROD3', 'Producto 3', 'Descripcion del producto 3', 208.00, 1382.00),
+(4, 7, 1, 1, 'PROD4', 'Producto 4', 'Descripcion del producto 4', 282.00, 919.00),
+(5, 9, 6, 1, 'PROD5', 'Producto 5', 'Descripcion del producto 5', 236.00, 904.00),
+(6, 1, 5, 1, 'PROD6', 'Producto 6', 'Descripcion del producto 6', 201.00, 1427.00),
+(7, 5, 10, 1, 'PROD7', 'Producto 7', 'Descripcion del producto 7', 100.00, 1234.00),
+(8, 2, 1, 1, 'PROD8', 'Producto 8', 'Descripcion del producto 8', 357.00, 1275.00),
+(9, 5, 7, 1, 'PROD9', 'Producto 9', 'Descripcion del producto 9', 332.00, 738.00),
+(10, 1, 9, 1, 'PROD10', 'Producto 10', 'Descripcion del producto 10', 430.00, 641.00);
+
 -- --------------------------------------------------------
 
 --
@@ -291,6 +341,22 @@ CREATE TABLE `proveedores` (
   `direccion` varchar(300) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `proveedores`
+--
+
+INSERT INTO `proveedores` (`id`, `estado_id`, `nombre_empresa`, `nit`, `correo`, `direccion`) VALUES
+(1, 1, 'Tech Bolivia', '100001', 'tech1@gmail.com', 'La Paz'),
+(2, 1, 'Digital Store', '100002', 'tech2@gmail.com', 'Santa Cruz'),
+(3, 1, 'CompuCenter', '100003', 'tech3@gmail.com', 'Cochabamba'),
+(4, 1, 'MegaPC', '100004', 'tech4@gmail.com', 'Oruro'),
+(5, 1, 'ElectroNet', '100005', 'tech5@gmail.com', 'Tarija'),
+(6, 1, 'InfoWorld', '100006', 'tech6@gmail.com', 'Beni'),
+(7, 1, 'Smart Import', '100007', 'tech7@gmail.com', 'Pando'),
+(8, 1, 'Digital Plus', '100008', 'tech8@gmail.com', 'La Paz'),
+(9, 1, 'Tech Global', '100009', 'tech9@gmail.com', 'Santa Cruz'),
+(10, 1, 'Importadora Uno', '100010', 'tech10@gmail.com', 'Cochabamba');
+
 -- --------------------------------------------------------
 
 --
@@ -351,6 +417,22 @@ CREATE TABLE `subcategorias` (
   `categoria_id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `subcategorias`
+--
+
+INSERT INTO `subcategorias` (`id`, `categoria_id`, `nombre`) VALUES
+(1, 1, 'Gaming'),
+(2, 1, 'Ultrabook'),
+(3, 2, 'Android'),
+(4, 2, 'iPhone'),
+(5, 3, '4K'),
+(6, 3, 'Curvos'),
+(7, 4, 'Teclados'),
+(8, 4, 'Mouse'),
+(9, 5, 'Laser'),
+(10, 6, 'Android Tablet');
 
 -- --------------------------------------------------------
 
@@ -634,7 +716,7 @@ ALTER TABLE `catalogos`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `envios`
@@ -646,7 +728,7 @@ ALTER TABLE `envios`
 -- AUTO_INCREMENT de la tabla `marcas`
 --
 ALTER TABLE `marcas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `movimientos_stock`
@@ -676,7 +758,7 @@ ALTER TABLE `pedido_detalles`
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `producto_imagenes`
@@ -706,7 +788,7 @@ ALTER TABLE `promocion_productos`
 -- AUTO_INCREMENT de la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `resenas`
@@ -718,7 +800,7 @@ ALTER TABLE `resenas`
 -- AUTO_INCREMENT de la tabla `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `stock_productos`
@@ -730,7 +812,7 @@ ALTER TABLE `stock_productos`
 -- AUTO_INCREMENT de la tabla `subcategorias`
 --
 ALTER TABLE `subcategorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `telefonos_proveedores`
