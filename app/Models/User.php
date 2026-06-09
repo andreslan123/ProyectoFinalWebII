@@ -12,33 +12,24 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    // Le decimos explícitamente qué tabla mapear
+    protected $table = 'users';
+
+    // Tus campos de asignación masiva ordenados
     protected $fillable = [
+        'rol_id',
+        'estado_id',
         'name',
         'email',
-        'password',
+        'password'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
+    // Oculta la contraseña cuando la API responda con un JSON de usuarios
     protected $hidden = [
         'password',
-        'remember_token',
+        'remember_token', // Añádelo por si tu migración o factory lo usan
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    // Como pusiste que no usas timestamps, Laravel no buscará 'created_at' ni 'updated_at'
+    public $timestamps = false;
 }
