@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Subcategoria extends Model
 {
     use HasFactory;
+
+    protected $table = 'subcategorias';
+    protected $fillable = ['nombre', 'categoria_id', 'estado_id'];
 }
