@@ -3,17 +3,13 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
+use App\Models\Catalogo;
+use App\Models\TelefonoUsuario;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TelefonoUsuario>
- */
 class TelefonoUsuarioFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = TelefonoUsuario::class;
     public function definition()
     {
         return [
