@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-06-2026 a las 21:21:33
+-- Tiempo de generación: 09-06-2026 a las 21:48:55
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,79 +28,10 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `carritos` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `estado_id` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `carrito_detalles`
---
-
-CREATE TABLE `carrito_detalles` (
-  `id` int(11) NOT NULL,
-  `carrito_id` int(11) NOT NULL,
-  `producto_id` int(11) NOT NULL,
-  `cantidad` int(11) NOT NULL DEFAULT 1,
-  `precio_unitario` decimal(12,2) NOT NULL DEFAULT 0.00
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `catalogos`
---
-
-CREATE TABLE `catalogos` (
-  `id` int(11) NOT NULL,
-  `tipo` varchar(50) NOT NULL,
-  `nombre` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `catalogos`
---
-
-INSERT INTO `catalogos` (`id`, `tipo`, `nombre`) VALUES
-(36, 'estado_carrito', 'abandonado'),
-(34, 'estado_carrito', 'activo'),
-(35, 'estado_carrito', 'procesado'),
-(21, 'estado_envio', 'entregado'),
-(20, 'estado_envio', 'en_camino'),
-(22, 'estado_envio', 'fallido'),
-(19, 'estado_envio', 'pendiente'),
-(16, 'estado_pago', 'aprobado'),
-(15, 'estado_pago', 'pendiente'),
-(17, 'estado_pago', 'rechazado'),
-(18, 'estado_pago', 'reembolsado'),
-(14, 'estado_pedido', 'cancelado'),
-(10, 'estado_pedido', 'confirmado'),
-(13, 'estado_pedido', 'entregado'),
-(12, 'estado_pedido', 'enviado'),
-(11, 'estado_pedido', 'en_proceso'),
-(9, 'estado_pedido', 'pendiente'),
-(4, 'estado_producto', 'activo'),
-(6, 'estado_producto', 'agotado'),
-(5, 'estado_producto', 'inactivo'),
-(23, 'estado_promocion', 'activa'),
-(24, 'estado_promocion', 'inactiva'),
-(25, 'estado_promocion', 'vencida'),
-(7, 'estado_proveedor', 'activo'),
-(8, 'estado_proveedor', 'inactivo'),
-(27, 'estado_resena', 'aprobada'),
-(26, 'estado_resena', 'pendiente'),
-(28, 'estado_resena', 'rechazada'),
-(1, 'estado_usuario', 'activo'),
-(2, 'estado_usuario', 'inactivo'),
-(3, 'estado_usuario', 'suspendido'),
-(33, 'tipo_descuento', 'monto_fijo'),
-(32, 'tipo_descuento', 'porcentaje'),
-(31, 'tipo_movimiento_stock', 'ajuste'),
-(29, 'tipo_movimiento_stock', 'entrada'),
-(30, 'tipo_movimiento_stock', 'salida');
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -109,43 +40,43 @@ INSERT INTO `catalogos` (`id`, `tipo`, `nombre`) VALUES
 --
 
 CREATE TABLE `categorias` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `categorias`
 --
 
-INSERT INTO `categorias` (`id`, `nombre`) VALUES
-(10, 'Accesorios'),
-(5, 'Direccion'),
-(9, 'Filtros'),
-(2, 'Frenos'),
-(7, 'Iluminacion'),
-(8, 'Lubricantes'),
-(1, 'Motores'),
-(6, 'Sistema Electrico'),
-(3, 'Suspension'),
-(4, 'Transmision');
+INSERT INTO `categorias` (`id`, `nombre`, `created_at`, `updated_at`) VALUES
+(1, 'Laptops', NULL, NULL),
+(2, 'Celulares', NULL, NULL),
+(3, 'Monitores', NULL, NULL),
+(4, 'Accesorios', NULL, NULL),
+(5, 'Impresoras', NULL, NULL),
+(6, 'Tablets', NULL, NULL),
+(7, 'Audifonos', NULL, NULL),
+(8, 'Teclados', NULL, NULL),
+(9, 'Mouse', NULL, NULL),
+(10, 'Camaras', NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `envios`
+-- Estructura de tabla para la tabla `failed_jobs`
 --
 
-CREATE TABLE `envios` (
-  `id` int(11) NOT NULL,
-  `pedido_id` int(11) NOT NULL,
-  `estado_id` int(11) NOT NULL,
-  `metodo_envio` varchar(50) NOT NULL,
-  `codigo_seguimiento` varchar(100) DEFAULT NULL,
-  `empresa_envio` varchar(150) DEFAULT NULL,
-  `costo_envio` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `fecha_envio` timestamp NULL DEFAULT NULL,
-  `fecha_entrega` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `failed_jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `uuid` varchar(255) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -154,86 +85,86 @@ CREATE TABLE `envios` (
 --
 
 CREATE TABLE `marcas` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `marcas`
 --
 
-INSERT INTO `marcas` (`id`, `nombre`) VALUES
-(4, 'Chevrolet'),
-(5, 'Ford'),
-(2, 'Honda'),
-(6, 'Hyundai'),
-(7, 'Kia'),
-(8, 'Mazda'),
-(3, 'Nissan'),
-(10, 'Suzuki'),
-(1, 'Toyota'),
-(9, 'Volkswagen');
+INSERT INTO `marcas` (`id`, `nombre`, `created_at`, `updated_at`) VALUES
+(1, 'HP', NULL, NULL),
+(2, 'Dell', NULL, NULL),
+(3, 'Lenovo', NULL, NULL),
+(4, 'Asus', NULL, NULL),
+(5, 'Acer', NULL, NULL),
+(6, 'Samsung', NULL, NULL),
+(7, 'Apple', NULL, NULL),
+(8, 'Xiaomi', NULL, NULL),
+(9, 'Logitech', NULL, NULL),
+(10, 'Sony', NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `movimientos_stock`
+-- Estructura de tabla para la tabla `migrations`
 --
 
-CREATE TABLE `movimientos_stock` (
-  `id` int(11) NOT NULL,
-  `producto_id` int(11) NOT NULL,
-  `tipo_movimiento_id` int(11) NOT NULL,
-  `cantidad` int(11) NOT NULL,
-  `motivo` varchar(300) DEFAULT NULL,
-  `fecha_movimiento` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `migrations` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `migration` varchar(255) NOT NULL,
+  `batch` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `migrations`
+--
+
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+(1, '2014_10_12_000000_create_users_table', 1),
+(2, '2014_10_12_100000_create_password_resets_table', 1),
+(3, '2019_08_19_000000_create_failed_jobs_table', 1),
+(4, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+(5, '2026_06_09_193145_create_roles_table', 1),
+(6, '2026_06_09_193152_create_categorias_table', 1),
+(7, '2026_06_09_193156_create_marcas_table', 1),
+(8, '2026_06_09_193201_create_subcategorias_table', 1),
+(9, '2026_06_09_193205_create_proveedores_table', 1),
+(10, '2026_06_09_193210_create_productos_table', 1),
+(11, '2026_06_09_193215_create_carritos_table', 1);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `pagos`
+-- Estructura de tabla para la tabla `password_resets`
 --
 
-CREATE TABLE `pagos` (
-  `id` int(11) NOT NULL,
-  `pedido_id` int(11) NOT NULL,
-  `estado_id` int(11) NOT NULL,
-  `metodo_pago` varchar(50) NOT NULL,
-  `monto` decimal(14,2) NOT NULL DEFAULT 0.00,
-  `comprobante` varchar(500) DEFAULT NULL,
-  `fecha_pago` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `password_resets` (
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `pedidos`
+-- Estructura de tabla para la tabla `personal_access_tokens`
 --
 
-CREATE TABLE `pedidos` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `estado_id` int(11) NOT NULL,
-  `codigo_pedido` varchar(50) NOT NULL,
-  `fecha_pedido` timestamp NOT NULL DEFAULT current_timestamp(),
-  `total` decimal(14,2) NOT NULL DEFAULT 0.00
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `pedido_detalles`
---
-
-CREATE TABLE `pedido_detalles` (
-  `id` int(11) NOT NULL,
-  `pedido_id` int(11) NOT NULL,
-  `producto_id` int(11) NOT NULL,
-  `cantidad` int(11) NOT NULL DEFAULT 1,
-  `precio_unitario` decimal(12,2) NOT NULL DEFAULT 0.00,
-  `subtotal` decimal(14,2) NOT NULL DEFAULT 0.00
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `personal_access_tokens` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `tokenable_type` varchar(255) NOT NULL,
+  `tokenable_id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `abilities` text DEFAULT NULL,
+  `last_used_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -242,89 +173,17 @@ CREATE TABLE `pedido_detalles` (
 --
 
 CREATE TABLE `productos` (
-  `id` int(11) NOT NULL,
-  `subcategoria_id` int(11) NOT NULL,
-  `marca_id` int(11) NOT NULL,
-  `estado_id` int(11) NOT NULL,
-  `codigo` varchar(50) NOT NULL,
-  `nombre` varchar(200) NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `subcategoria_id` bigint(20) UNSIGNED NOT NULL,
+  `marca_id` bigint(20) UNSIGNED NOT NULL,
+  `estado_id` int(11) NOT NULL DEFAULT 1,
+  `codigo_barra` varchar(255) NOT NULL,
+  `nombre` varchar(255) NOT NULL,
   `descripcion` text DEFAULT NULL,
-  `precio_compra` decimal(12,2) NOT NULL DEFAULT 0.00,
-  `precio_venta` decimal(12,2) NOT NULL DEFAULT 0.00
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `productos`
---
-
-INSERT INTO `productos` (`id`, `subcategoria_id`, `marca_id`, `estado_id`, `codigo`, `nombre`, `descripcion`, `precio_compra`, `precio_venta`) VALUES
-(1, 1, 1, 1, 'AUT001', 'Piston Toyota Corolla', 'Piston original Toyota', 120.00, 180.00),
-(2, 2, 2, 1, 'AUT002', 'Culata Honda Civic', 'Culata completa Honda', 300.00, 450.00),
-(3, 3, 3, 1, 'AUT003', 'Pastillas de Freno Nissan', 'Juego completo', 50.00, 90.00),
-(4, 4, 4, 1, 'AUT004', 'Disco de Freno Chevrolet', 'Disco delantero', 80.00, 130.00),
-(5, 5, 5, 1, 'AUT005', 'Amortiguador Ford', 'Amortiguador trasero', 110.00, 170.00),
-(6, 6, 6, 1, 'AUT006', 'Kit Embrague Hyundai', 'Kit completo', 220.00, 320.00),
-(7, 7, 7, 1, 'AUT007', 'Rotula Kia', 'Rotula superior', 40.00, 75.00),
-(8, 8, 8, 1, 'AUT008', 'Bateria Mazda', 'Bateria 12V', 100.00, 160.00),
-(9, 9, 9, 1, 'AUT009', 'Faro Volkswagen', 'Faro delantero', 90.00, 145.00),
-(10, 10, 10, 1, 'AUT010', 'Filtro Aceite Suzuki', 'Filtro original', 20.00, 45.00);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `producto_imagenes`
---
-
-CREATE TABLE `producto_imagenes` (
-  `id` int(11) NOT NULL,
-  `producto_id` int(11) NOT NULL,
-  `imagen` varchar(500) NOT NULL,
-  `principal` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `producto_proveedor`
---
-
-CREATE TABLE `producto_proveedor` (
-  `id` int(11) NOT NULL,
-  `producto_id` int(11) NOT NULL,
-  `proveedor_id` int(11) NOT NULL,
-  `precio_compra` decimal(12,2) NOT NULL DEFAULT 0.00,
-  `codigo_proveedor` varchar(100) DEFAULT NULL,
-  `principal` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `promociones`
---
-
-CREATE TABLE `promociones` (
-  `id` int(11) NOT NULL,
-  `estado_id` int(11) NOT NULL,
-  `tipo_descuento` varchar(20) NOT NULL,
-  `titulo` varchar(200) NOT NULL,
-  `descripcion` text DEFAULT NULL,
-  `valor_descuento` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `fecha_inicio` date NOT NULL,
-  `fecha_fin` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `promocion_productos`
---
-
-CREATE TABLE `promocion_productos` (
-  `id` int(11) NOT NULL,
-  `promocion_id` int(11) NOT NULL,
-  `producto_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `precio_venta` decimal(10,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -333,45 +192,31 @@ CREATE TABLE `promocion_productos` (
 --
 
 CREATE TABLE `proveedores` (
-  `id` int(11) NOT NULL,
-  `estado_id` int(11) NOT NULL,
-  `nombre_empresa` varchar(200) NOT NULL,
-  `nit` varchar(50) DEFAULT NULL,
-  `correo` varchar(191) DEFAULT NULL,
-  `direccion` varchar(300) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `estado_id` int(11) NOT NULL DEFAULT 1,
+  `nombre_empresa` varchar(255) NOT NULL,
+  `nit` varchar(255) NOT NULL,
+  `correo` varchar(255) NOT NULL,
+  `direccion` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `proveedores`
 --
 
-INSERT INTO `proveedores` (`id`, `estado_id`, `nombre_empresa`, `nit`, `correo`, `direccion`) VALUES
-(1, 1, 'AutoPartes Bolivia', '100001', 'contacto@autopartes.com', 'La Paz'),
-(2, 1, 'Motores Express', '100002', 'ventas@motores.com', 'Santa Cruz'),
-(3, 1, 'Repuestos Toyota', '100003', 'toyota@repuestos.com', 'Cochabamba'),
-(4, 1, 'Importadora Automotriz', '100004', 'importadora@gmail.com', 'Oruro'),
-(5, 1, 'Frenos Center', '100005', 'frenos@gmail.com', 'Tarija'),
-(6, 1, 'Suspension Pro', '100006', 'suspension@gmail.com', 'Beni'),
-(7, 1, 'Lubricantes Max', '100007', 'lubricantes@gmail.com', 'Pando'),
-(8, 1, 'Electric Auto', '100008', 'electric@gmail.com', 'La Paz'),
-(9, 1, 'Faros y Accesorios', '100009', 'faros@gmail.com', 'Santa Cruz'),
-(10, 1, 'Mega Repuestos', '100010', 'mega@gmail.com', 'Cochabamba');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `resenas`
---
-
-CREATE TABLE `resenas` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `producto_id` int(11) NOT NULL,
-  `estado_id` int(11) NOT NULL,
-  `calificacion` tinyint(4) NOT NULL CHECK (`calificacion` between 1 and 5),
-  `comentario` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `proveedores` (`id`, `estado_id`, `nombre_empresa`, `nit`, `correo`, `direccion`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Tech Bolivia', '100001', 'tech1@gmail.com', 'La Paz', NULL, NULL),
+(2, 1, 'Digital Store', '100002', 'tech2@gmail.com', 'Santa Cruz', NULL, NULL),
+(3, 1, 'CompuCenter', '100003', 'tech3@gmail.com', 'Cochabamba', NULL, NULL),
+(4, 1, 'MegaPC', '100004', 'tech4@gmail.com', 'Oruro', NULL, NULL),
+(5, 1, 'ElectroNet', '100005', 'tech5@gmail.com', 'Tarija', NULL, NULL),
+(6, 1, 'InfoWorld', '100006', 'tech6@gmail.com', 'Beni', NULL, NULL),
+(7, 1, 'Smart Import', '100007', 'tech7@gmail.com', 'Pando', NULL, NULL),
+(8, 1, 'Digital Plus', '100008', 'tech8@gmail.com', 'La Paz', NULL, NULL),
+(9, 1, 'Tech Global', '100009', 'tech9@gmail.com', 'Santa Cruz', NULL, NULL),
+(10, 1, 'Importadora Uno', '100010', 'tech10@gmail.com', 'Cochabamba', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -380,31 +225,27 @@ CREATE TABLE `resenas` (
 --
 
 CREATE TABLE `roles` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `roles`
 --
 
-INSERT INTO `roles` (`id`, `nombre`) VALUES
-(1, 'admin'),
-(2, 'cliente'),
-(3, 'vendedor');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `stock_productos`
---
-
-CREATE TABLE `stock_productos` (
-  `id` int(11) NOT NULL,
-  `producto_id` int(11) NOT NULL,
-  `cantidad_actual` int(11) NOT NULL DEFAULT 0,
-  `stock_minimo` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `roles` (`id`, `nombre`, `created_at`, `updated_at`) VALUES
+(1, 'Administrador', NULL, NULL),
+(2, 'Cliente', NULL, NULL),
+(3, 'Vendedor', NULL, NULL),
+(4, 'Supervisor', NULL, NULL),
+(5, 'Gerente', NULL, NULL),
+(6, 'Almacen', NULL, NULL),
+(7, 'Marketing', NULL, NULL),
+(8, 'Soporte', NULL, NULL),
+(9, 'Contador', NULL, NULL),
+(10, 'Invitado', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -413,74 +254,28 @@ CREATE TABLE `stock_productos` (
 --
 
 CREATE TABLE `subcategorias` (
-  `id` int(11) NOT NULL,
-  `categoria_id` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `categoria_id` bigint(20) UNSIGNED NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `subcategorias`
 --
 
-INSERT INTO `subcategorias` (`id`, `categoria_id`, `nombre`) VALUES
-(1, 1, 'Pistones'),
-(2, 1, 'Culatas'),
-(3, 2, 'Pastillas de Freno'),
-(4, 2, 'Discos de Freno'),
-(5, 3, 'Amortiguadores'),
-(6, 4, 'Embragues'),
-(7, 5, 'Rotulas'),
-(8, 6, 'Baterias'),
-(9, 7, 'Faros'),
-(10, 9, 'Filtros de Aceite');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `telefonos_proveedores`
---
-
-CREATE TABLE `telefonos_proveedores` (
-  `id` int(11) NOT NULL,
-  `proveedor_id` int(11) NOT NULL,
-  `tipo_telefono_id` int(11) NOT NULL,
-  `numero` varchar(30) NOT NULL,
-  `principal` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `telefonos_usuarios`
---
-
-CREATE TABLE `telefonos_usuarios` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `tipo_telefono_id` int(11) NOT NULL,
-  `numero` varchar(30) NOT NULL,
-  `principal` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tipos_telefono`
---
-
-CREATE TABLE `tipos_telefono` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tipos_telefono`
---
-
-INSERT INTO `tipos_telefono` (`id`, `nombre`) VALUES
-(1, 'celular'),
-(2, 'fijo'),
-(3, 'whatsapp');
+INSERT INTO `subcategorias` (`id`, `categoria_id`, `nombre`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Gaming', NULL, NULL),
+(2, 1, 'Ultrabook', NULL, NULL),
+(3, 2, 'Android', NULL, NULL),
+(4, 2, 'iPhone', NULL, NULL),
+(5, 3, '4K', NULL, NULL),
+(6, 3, 'Curvos', NULL, NULL),
+(7, 4, 'Teclados', NULL, NULL),
+(8, 4, 'Mouse', NULL, NULL),
+(9, 5, 'Laser', NULL, NULL),
+(10, 6, 'Android Tablet', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -489,14 +284,15 @@ INSERT INTO `tipos_telefono` (`id`, `nombre`) VALUES
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `rol_id` int(11) NOT NULL,
-  `estado_id` int(11) NOT NULL,
-  `name` varchar(150) NOT NULL,
-  `email` varchar(191) NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `remember_token` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Índices para tablas volcadas
@@ -506,189 +302,80 @@ CREATE TABLE `users` (
 -- Indices de la tabla `carritos`
 --
 ALTER TABLE `carritos`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_carrito_user` (`user_id`),
-  ADD KEY `fk_carrito_estado` (`estado_id`);
-
---
--- Indices de la tabla `carrito_detalles`
---
-ALTER TABLE `carrito_detalles`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uq_carrito_prod` (`carrito_id`,`producto_id`),
-  ADD KEY `fk_cd_prod` (`producto_id`);
-
---
--- Indices de la tabla `catalogos`
---
-ALTER TABLE `catalogos`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uq_catalogo` (`tipo`,`nombre`),
-  ADD KEY `idx_catalogos_tipo` (`tipo`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uq_cat` (`nombre`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `envios`
+-- Indices de la tabla `failed_jobs`
 --
-ALTER TABLE `envios`
+ALTER TABLE `failed_jobs`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_env_estado` (`estado_id`),
-  ADD KEY `idx_envios_pedido` (`pedido_id`);
+  ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
 
 --
 -- Indices de la tabla `marcas`
 --
 ALTER TABLE `marcas`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uq_marca` (`nombre`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `movimientos_stock`
+-- Indices de la tabla `migrations`
 --
-ALTER TABLE `movimientos_stock`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_mov_tipo` (`tipo_movimiento_id`),
-  ADD KEY `idx_movstock_producto` (`producto_id`);
+ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `pagos`
+-- Indices de la tabla `password_resets`
 --
-ALTER TABLE `pagos`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_pago_estado` (`estado_id`),
-  ADD KEY `idx_pagos_pedido` (`pedido_id`);
+ALTER TABLE `password_resets`
+  ADD KEY `password_resets_email_index` (`email`);
 
 --
--- Indices de la tabla `pedidos`
+-- Indices de la tabla `personal_access_tokens`
 --
-ALTER TABLE `pedidos`
+ALTER TABLE `personal_access_tokens`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uq_codigo_pedido` (`codigo_pedido`),
-  ADD KEY `idx_pedidos_user` (`user_id`),
-  ADD KEY `idx_pedidos_estado` (`estado_id`);
-
---
--- Indices de la tabla `pedido_detalles`
---
-ALTER TABLE `pedido_detalles`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_pdet_prod` (`producto_id`),
-  ADD KEY `idx_pedido_det_pedido` (`pedido_id`);
+  ADD UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
+  ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
 
 --
 -- Indices de la tabla `productos`
 --
 ALTER TABLE `productos`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uq_prod_codigo` (`codigo`),
-  ADD KEY `fk_prod_estado` (`estado_id`),
-  ADD KEY `idx_productos_subcategoria` (`subcategoria_id`),
-  ADD KEY `idx_productos_marca` (`marca_id`);
-
---
--- Indices de la tabla `producto_imagenes`
---
-ALTER TABLE `producto_imagenes`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_img_prod` (`producto_id`);
-
---
--- Indices de la tabla `producto_proveedor`
---
-ALTER TABLE `producto_proveedor`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uq_prod_prov` (`producto_id`,`proveedor_id`),
-  ADD KEY `fk_pp_prov` (`proveedor_id`);
-
---
--- Indices de la tabla `promociones`
---
-ALTER TABLE `promociones`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_promo_estado` (`estado_id`);
-
---
--- Indices de la tabla `promocion_productos`
---
-ALTER TABLE `promocion_productos`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uq_promo_prod` (`promocion_id`,`producto_id`),
-  ADD KEY `fk_pp2_prod` (`producto_id`);
+  ADD KEY `productos_subcategoria_id_foreign` (`subcategoria_id`),
+  ADD KEY `productos_marca_id_foreign` (`marca_id`);
 
 --
 -- Indices de la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_prov_estado` (`estado_id`);
-
---
--- Indices de la tabla `resenas`
---
-ALTER TABLE `resenas`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_res_user` (`user_id`),
-  ADD KEY `fk_res_estado` (`estado_id`),
-  ADD KEY `idx_resenas_producto` (`producto_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `roles`
 --
 ALTER TABLE `roles`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uq_rol` (`nombre`);
-
---
--- Indices de la tabla `stock_productos`
---
-ALTER TABLE `stock_productos`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uq_stock_prod` (`producto_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `subcategorias`
 --
 ALTER TABLE `subcategorias`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_subcat_cat` (`categoria_id`);
-
---
--- Indices de la tabla `telefonos_proveedores`
---
-ALTER TABLE `telefonos_proveedores`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_telprov_prov` (`proveedor_id`),
-  ADD KEY `fk_telprov_tipo` (`tipo_telefono_id`);
-
---
--- Indices de la tabla `telefonos_usuarios`
---
-ALTER TABLE `telefonos_usuarios`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_teluser_user` (`user_id`),
-  ADD KEY `fk_teluser_tipo` (`tipo_telefono_id`);
-
---
--- Indices de la tabla `tipos_telefono`
---
-ALTER TABLE `tipos_telefono`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uq_tipo_tel` (`nombre`);
+  ADD KEY `subcategorias_categoria_id_foreign` (`categoria_id`);
 
 --
 -- Indices de la tabla `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uq_email` (`email`),
-  ADD KEY `fk_user_rol` (`rol_id`),
-  ADD KEY `fk_user_estado` (`estado_id`);
+  ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -698,279 +385,84 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `carritos`
 --
 ALTER TABLE `carritos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `carrito_detalles`
---
-ALTER TABLE `carrito_detalles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `catalogos`
---
-ALTER TABLE `catalogos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT de la tabla `envios`
+-- AUTO_INCREMENT de la tabla `failed_jobs`
 --
-ALTER TABLE `envios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `failed_jobs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `marcas`
 --
 ALTER TABLE `marcas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT de la tabla `movimientos_stock`
+-- AUTO_INCREMENT de la tabla `migrations`
 --
-ALTER TABLE `movimientos_stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `migrations`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT de la tabla `pagos`
+-- AUTO_INCREMENT de la tabla `personal_access_tokens`
 --
-ALTER TABLE `pagos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `pedidos`
---
-ALTER TABLE `pedidos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `pedido_detalles`
---
-ALTER TABLE `pedido_detalles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `personal_access_tokens`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT de la tabla `producto_imagenes`
---
-ALTER TABLE `producto_imagenes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `producto_proveedor`
---
-ALTER TABLE `producto_proveedor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `promociones`
---
-ALTER TABLE `promociones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `promocion_productos`
---
-ALTER TABLE `promocion_productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT de la tabla `resenas`
---
-ALTER TABLE `resenas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
-
---
--- AUTO_INCREMENT de la tabla `stock_productos`
---
-ALTER TABLE `stock_productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `subcategorias`
 --
 ALTER TABLE `subcategorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT de la tabla `telefonos_proveedores`
---
-ALTER TABLE `telefonos_proveedores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `telefonos_usuarios`
---
-ALTER TABLE `telefonos_usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `tipos_telefono`
---
-ALTER TABLE `tipos_telefono`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
 --
 
 --
--- Filtros para la tabla `carritos`
---
-ALTER TABLE `carritos`
-  ADD CONSTRAINT `fk_carrito_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`),
-  ADD CONSTRAINT `fk_carrito_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- Filtros para la tabla `carrito_detalles`
---
-ALTER TABLE `carrito_detalles`
-  ADD CONSTRAINT `fk_cd_carrito` FOREIGN KEY (`carrito_id`) REFERENCES `carritos` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_cd_prod` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`);
-
---
--- Filtros para la tabla `envios`
---
-ALTER TABLE `envios`
-  ADD CONSTRAINT `fk_env_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`),
-  ADD CONSTRAINT `fk_env_pedido` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`);
-
---
--- Filtros para la tabla `movimientos_stock`
---
-ALTER TABLE `movimientos_stock`
-  ADD CONSTRAINT `fk_mov_prod` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`),
-  ADD CONSTRAINT `fk_mov_tipo` FOREIGN KEY (`tipo_movimiento_id`) REFERENCES `catalogos` (`id`);
-
---
--- Filtros para la tabla `pagos`
---
-ALTER TABLE `pagos`
-  ADD CONSTRAINT `fk_pago_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`),
-  ADD CONSTRAINT `fk_pago_pedido` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`);
-
---
--- Filtros para la tabla `pedidos`
---
-ALTER TABLE `pedidos`
-  ADD CONSTRAINT `fk_ped_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`),
-  ADD CONSTRAINT `fk_ped_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- Filtros para la tabla `pedido_detalles`
---
-ALTER TABLE `pedido_detalles`
-  ADD CONSTRAINT `fk_pdet_ped` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_pdet_prod` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`);
-
---
 -- Filtros para la tabla `productos`
 --
 ALTER TABLE `productos`
-  ADD CONSTRAINT `fk_prod_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`),
-  ADD CONSTRAINT `fk_prod_marca` FOREIGN KEY (`marca_id`) REFERENCES `marcas` (`id`),
-  ADD CONSTRAINT `fk_prod_subcat` FOREIGN KEY (`subcategoria_id`) REFERENCES `subcategorias` (`id`);
-
---
--- Filtros para la tabla `producto_imagenes`
---
-ALTER TABLE `producto_imagenes`
-  ADD CONSTRAINT `fk_img_prod` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `producto_proveedor`
---
-ALTER TABLE `producto_proveedor`
-  ADD CONSTRAINT `fk_pp_prod` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`),
-  ADD CONSTRAINT `fk_pp_prov` FOREIGN KEY (`proveedor_id`) REFERENCES `proveedores` (`id`);
-
---
--- Filtros para la tabla `promociones`
---
-ALTER TABLE `promociones`
-  ADD CONSTRAINT `fk_promo_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`);
-
---
--- Filtros para la tabla `promocion_productos`
---
-ALTER TABLE `promocion_productos`
-  ADD CONSTRAINT `fk_pp2_prod` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`),
-  ADD CONSTRAINT `fk_pp2_promo` FOREIGN KEY (`promocion_id`) REFERENCES `promociones` (`id`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `proveedores`
---
-ALTER TABLE `proveedores`
-  ADD CONSTRAINT `fk_prov_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`);
-
---
--- Filtros para la tabla `resenas`
---
-ALTER TABLE `resenas`
-  ADD CONSTRAINT `fk_res_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`),
-  ADD CONSTRAINT `fk_res_prod` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`),
-  ADD CONSTRAINT `fk_res_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- Filtros para la tabla `stock_productos`
---
-ALTER TABLE `stock_productos`
-  ADD CONSTRAINT `fk_stock_prod` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`);
+  ADD CONSTRAINT `productos_marca_id_foreign` FOREIGN KEY (`marca_id`) REFERENCES `marcas` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `productos_subcategoria_id_foreign` FOREIGN KEY (`subcategoria_id`) REFERENCES `subcategorias` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `subcategorias`
 --
 ALTER TABLE `subcategorias`
-  ADD CONSTRAINT `fk_subcat_cat` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`);
-
---
--- Filtros para la tabla `telefonos_proveedores`
---
-ALTER TABLE `telefonos_proveedores`
-  ADD CONSTRAINT `fk_telprov_prov` FOREIGN KEY (`proveedor_id`) REFERENCES `proveedores` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_telprov_tipo` FOREIGN KEY (`tipo_telefono_id`) REFERENCES `tipos_telefono` (`id`);
-
---
--- Filtros para la tabla `telefonos_usuarios`
---
-ALTER TABLE `telefonos_usuarios`
-  ADD CONSTRAINT `fk_teluser_tipo` FOREIGN KEY (`tipo_telefono_id`) REFERENCES `tipos_telefono` (`id`),
-  ADD CONSTRAINT `fk_teluser_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `users`
---
-ALTER TABLE `users`
-  ADD CONSTRAINT `fk_user_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`),
-  ADD CONSTRAINT `fk_user_rol` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`);
+  ADD CONSTRAINT `subcategorias_categoria_id_foreign` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
