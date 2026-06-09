@@ -3,21 +3,19 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Proveedor;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Proceedor>
- */
 class ProveedorFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Proveedor::class;
     public function definition()
     {
+        
         return [
-            //
+            'nombre' => $this->faker->company(),
+            'nit' => $this->faker->unique()->numerify('#########'), // Genera un NIT de 9 dígitos
+            'correo' => $this->faker->unique()->companyEmail(),
+            'estado_id' => 1, // ID del catálogo para 'Activo'
         ];
     }
 }
