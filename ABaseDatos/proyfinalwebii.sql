@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-06-2026 a las 03:49:33
+-- Tiempo de generación: 09-06-2026 a las 20:53:51
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Tabla carritos, guarda el carrito principal de cada usuario
+-- Base de datos: `proyfinalwebii`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `carritos`
 --
 
 CREATE TABLE `carritos` (
@@ -31,7 +37,7 @@ CREATE TABLE `carritos` (
 -- --------------------------------------------------------
 
 --
--- Detalle del carrito, aqui van los productos agregados
+-- Estructura de tabla para la tabla `carrito_detalles`
 --
 
 CREATE TABLE `carrito_detalles` (
@@ -45,7 +51,7 @@ CREATE TABLE `carrito_detalles` (
 -- --------------------------------------------------------
 
 --
--- Catalogos generales para estados y tipos del sistema
+-- Estructura de tabla para la tabla `catalogos`
 --
 
 CREATE TABLE `catalogos` (
@@ -55,7 +61,7 @@ CREATE TABLE `catalogos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Datos iniciales de catalogos, no borrar porque se usan como estados
+-- Volcado de datos para la tabla `catalogos`
 --
 
 INSERT INTO `catalogos` (`id`, `tipo`, `nombre`) VALUES
@@ -99,7 +105,7 @@ INSERT INTO `catalogos` (`id`, `tipo`, `nombre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Categorias principales de los repuestos
+-- Estructura de tabla para la tabla `categorias`
 --
 
 CREATE TABLE `categorias` (
@@ -107,10 +113,26 @@ CREATE TABLE `categorias` (
   `nombre` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `categorias`
+--
+
+INSERT INTO `categorias` (`id`, `nombre`) VALUES
+(4, 'Accesorios'),
+(7, 'Audifonos'),
+(10, 'Camaras'),
+(2, 'Celulares'),
+(5, 'Impresoras'),
+(1, 'Laptops'),
+(3, 'Monitores'),
+(9, 'Mouse'),
+(6, 'Tablets'),
+(8, 'Teclados');
+
 -- --------------------------------------------------------
 
 --
--- Envios de los pedidos realizados
+-- Estructura de tabla para la tabla `envios`
 --
 
 CREATE TABLE `envios` (
@@ -128,7 +150,7 @@ CREATE TABLE `envios` (
 -- --------------------------------------------------------
 
 --
--- Marcas de los productos o repuestos
+-- Estructura de tabla para la tabla `marcas`
 --
 
 CREATE TABLE `marcas` (
@@ -136,10 +158,26 @@ CREATE TABLE `marcas` (
   `nombre` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `marcas`
+--
+
+INSERT INTO `marcas` (`id`, `nombre`) VALUES
+(5, 'Acer'),
+(7, 'Apple'),
+(4, 'Asus'),
+(2, 'Dell'),
+(1, 'HP'),
+(3, 'Lenovo'),
+(9, 'Logitech'),
+(6, 'Samsung'),
+(10, 'Sony'),
+(8, 'Xiaomi');
+
 -- --------------------------------------------------------
 
 --
--- Movimientos del stock, entradas salidas y ajustes
+-- Estructura de tabla para la tabla `movimientos_stock`
 --
 
 CREATE TABLE `movimientos_stock` (
@@ -154,7 +192,7 @@ CREATE TABLE `movimientos_stock` (
 -- --------------------------------------------------------
 
 --
--- Pagos de los pedidos
+-- Estructura de tabla para la tabla `pagos`
 --
 
 CREATE TABLE `pagos` (
@@ -170,7 +208,7 @@ CREATE TABLE `pagos` (
 -- --------------------------------------------------------
 
 --
--- Pedidos hechos por los usuarios
+-- Estructura de tabla para la tabla `pedidos`
 --
 
 CREATE TABLE `pedidos` (
@@ -185,7 +223,7 @@ CREATE TABLE `pedidos` (
 -- --------------------------------------------------------
 
 --
--- Detalle de cada pedido, productos y subtotales
+-- Estructura de tabla para la tabla `pedido_detalles`
 --
 
 CREATE TABLE `pedido_detalles` (
@@ -200,7 +238,7 @@ CREATE TABLE `pedido_detalles` (
 -- --------------------------------------------------------
 
 --
--- Productos de la tienda de motorepuestos
+-- Estructura de tabla para la tabla `productos`
 --
 
 CREATE TABLE `productos` (
@@ -215,10 +253,26 @@ CREATE TABLE `productos` (
   `precio_venta` decimal(12,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `productos`
+--
+
+INSERT INTO `productos` (`id`, `subcategoria_id`, `marca_id`, `estado_id`, `codigo`, `nombre`, `descripcion`, `precio_compra`, `precio_venta`) VALUES
+(1, 4, 7, 1, 'PROD1', 'Producto 1', 'Descripcion del producto 1', 496.00, 803.00),
+(2, 7, 7, 1, 'PROD2', 'Producto 2', 'Descripcion del producto 2', 195.00, 752.00),
+(3, 8, 3, 1, 'PROD3', 'Producto 3', 'Descripcion del producto 3', 208.00, 1382.00),
+(4, 7, 1, 1, 'PROD4', 'Producto 4', 'Descripcion del producto 4', 282.00, 919.00),
+(5, 9, 6, 1, 'PROD5', 'Producto 5', 'Descripcion del producto 5', 236.00, 904.00),
+(6, 1, 5, 1, 'PROD6', 'Producto 6', 'Descripcion del producto 6', 201.00, 1427.00),
+(7, 5, 10, 1, 'PROD7', 'Producto 7', 'Descripcion del producto 7', 100.00, 1234.00),
+(8, 2, 1, 1, 'PROD8', 'Producto 8', 'Descripcion del producto 8', 357.00, 1275.00),
+(9, 5, 7, 1, 'PROD9', 'Producto 9', 'Descripcion del producto 9', 332.00, 738.00),
+(10, 1, 9, 1, 'PROD10', 'Producto 10', 'Descripcion del producto 10', 430.00, 641.00);
+
 -- --------------------------------------------------------
 
 --
--- Imagenes de los productos
+-- Estructura de tabla para la tabla `producto_imagenes`
 --
 
 CREATE TABLE `producto_imagenes` (
@@ -231,7 +285,7 @@ CREATE TABLE `producto_imagenes` (
 -- --------------------------------------------------------
 
 --
--- Relacion entre productos y proveedores
+-- Estructura de tabla para la tabla `producto_proveedor`
 --
 
 CREATE TABLE `producto_proveedor` (
@@ -246,7 +300,7 @@ CREATE TABLE `producto_proveedor` (
 -- --------------------------------------------------------
 
 --
--- Promociones o descuentos de la tienda
+-- Estructura de tabla para la tabla `promociones`
 --
 
 CREATE TABLE `promociones` (
@@ -263,7 +317,7 @@ CREATE TABLE `promociones` (
 -- --------------------------------------------------------
 
 --
--- Productos que entran en una promocion
+-- Estructura de tabla para la tabla `promocion_productos`
 --
 
 CREATE TABLE `promocion_productos` (
@@ -275,7 +329,7 @@ CREATE TABLE `promocion_productos` (
 -- --------------------------------------------------------
 
 --
--- Proveedores que abastecen los repuestos
+-- Estructura de tabla para la tabla `proveedores`
 --
 
 CREATE TABLE `proveedores` (
@@ -287,10 +341,26 @@ CREATE TABLE `proveedores` (
   `direccion` varchar(300) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `proveedores`
+--
+
+INSERT INTO `proveedores` (`id`, `estado_id`, `nombre_empresa`, `nit`, `correo`, `direccion`) VALUES
+(1, 1, 'Tech Bolivia', '100001', 'tech1@gmail.com', 'La Paz'),
+(2, 1, 'Digital Store', '100002', 'tech2@gmail.com', 'Santa Cruz'),
+(3, 1, 'CompuCenter', '100003', 'tech3@gmail.com', 'Cochabamba'),
+(4, 1, 'MegaPC', '100004', 'tech4@gmail.com', 'Oruro'),
+(5, 1, 'ElectroNet', '100005', 'tech5@gmail.com', 'Tarija'),
+(6, 1, 'InfoWorld', '100006', 'tech6@gmail.com', 'Beni'),
+(7, 1, 'Smart Import', '100007', 'tech7@gmail.com', 'Pando'),
+(8, 1, 'Digital Plus', '100008', 'tech8@gmail.com', 'La Paz'),
+(9, 1, 'Tech Global', '100009', 'tech9@gmail.com', 'Santa Cruz'),
+(10, 1, 'Importadora Uno', '100010', 'tech10@gmail.com', 'Cochabamba');
+
 -- --------------------------------------------------------
 
 --
--- Reseñas y calificaciones de los productos
+-- Estructura de tabla para la tabla `resenas`
 --
 
 CREATE TABLE `resenas` (
@@ -306,7 +376,7 @@ CREATE TABLE `resenas` (
 -- --------------------------------------------------------
 
 --
--- Roles del sistema
+-- Estructura de tabla para la tabla `roles`
 --
 
 CREATE TABLE `roles` (
@@ -315,7 +385,7 @@ CREATE TABLE `roles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Datos iniciales para roles
+-- Volcado de datos para la tabla `roles`
 --
 
 INSERT INTO `roles` (`id`, `nombre`) VALUES
@@ -326,7 +396,7 @@ INSERT INTO `roles` (`id`, `nombre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Stock actual y minimo de cada producto
+-- Estructura de tabla para la tabla `stock_productos`
 --
 
 CREATE TABLE `stock_productos` (
@@ -339,7 +409,7 @@ CREATE TABLE `stock_productos` (
 -- --------------------------------------------------------
 
 --
--- Subcategorias que dependen de categorias
+-- Estructura de tabla para la tabla `subcategorias`
 --
 
 CREATE TABLE `subcategorias` (
@@ -348,10 +418,26 @@ CREATE TABLE `subcategorias` (
   `nombre` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `subcategorias`
+--
+
+INSERT INTO `subcategorias` (`id`, `categoria_id`, `nombre`) VALUES
+(1, 1, 'Gaming'),
+(2, 1, 'Ultrabook'),
+(3, 2, 'Android'),
+(4, 2, 'iPhone'),
+(5, 3, '4K'),
+(6, 3, 'Curvos'),
+(7, 4, 'Teclados'),
+(8, 4, 'Mouse'),
+(9, 5, 'Laser'),
+(10, 6, 'Android Tablet');
+
 -- --------------------------------------------------------
 
 --
--- Telefonos de los proveedores
+-- Estructura de tabla para la tabla `telefonos_proveedores`
 --
 
 CREATE TABLE `telefonos_proveedores` (
@@ -365,7 +451,7 @@ CREATE TABLE `telefonos_proveedores` (
 -- --------------------------------------------------------
 
 --
--- Telefonos de los usuarios
+-- Estructura de tabla para la tabla `telefonos_usuarios`
 --
 
 CREATE TABLE `telefonos_usuarios` (
@@ -379,7 +465,7 @@ CREATE TABLE `telefonos_usuarios` (
 -- --------------------------------------------------------
 
 --
--- Tipos de telefono que se pueden registrar
+-- Estructura de tabla para la tabla `tipos_telefono`
 --
 
 CREATE TABLE `tipos_telefono` (
@@ -388,7 +474,7 @@ CREATE TABLE `tipos_telefono` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Datos iniciales para tipos de telefono
+-- Volcado de datos para la tabla `tipos_telefono`
 --
 
 INSERT INTO `tipos_telefono` (`id`, `nombre`) VALUES
@@ -399,7 +485,7 @@ INSERT INTO `tipos_telefono` (`id`, `nombre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Usuarios registrados en el sistema
+-- Estructura de tabla para la tabla `users`
 --
 
 CREATE TABLE `users` (
@@ -413,11 +499,11 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Indices de las tablas, importante para llaves y busquedas
+-- Índices para tablas volcadas
 --
 
 --
--- Indices de `carritos`
+-- Indices de la tabla `carritos`
 --
 ALTER TABLE `carritos`
   ADD PRIMARY KEY (`id`),
@@ -425,7 +511,7 @@ ALTER TABLE `carritos`
   ADD KEY `fk_carrito_estado` (`estado_id`);
 
 --
--- Indices de `carrito_detalles`
+-- Indices de la tabla `carrito_detalles`
 --
 ALTER TABLE `carrito_detalles`
   ADD PRIMARY KEY (`id`),
@@ -433,7 +519,7 @@ ALTER TABLE `carrito_detalles`
   ADD KEY `fk_cd_prod` (`producto_id`);
 
 --
--- Indices de `catalogos`
+-- Indices de la tabla `catalogos`
 --
 ALTER TABLE `catalogos`
   ADD PRIMARY KEY (`id`),
@@ -441,14 +527,14 @@ ALTER TABLE `catalogos`
   ADD KEY `idx_catalogos_tipo` (`tipo`);
 
 --
--- Indices de `categorias`
+-- Indices de la tabla `categorias`
 --
 ALTER TABLE `categorias`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uq_cat` (`nombre`);
 
 --
--- Indices de `envios`
+-- Indices de la tabla `envios`
 --
 ALTER TABLE `envios`
   ADD PRIMARY KEY (`id`),
@@ -456,14 +542,14 @@ ALTER TABLE `envios`
   ADD KEY `idx_envios_pedido` (`pedido_id`);
 
 --
--- Indices de `marcas`
+-- Indices de la tabla `marcas`
 --
 ALTER TABLE `marcas`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uq_marca` (`nombre`);
 
 --
--- Indices de `movimientos_stock`
+-- Indices de la tabla `movimientos_stock`
 --
 ALTER TABLE `movimientos_stock`
   ADD PRIMARY KEY (`id`),
@@ -471,7 +557,7 @@ ALTER TABLE `movimientos_stock`
   ADD KEY `idx_movstock_producto` (`producto_id`);
 
 --
--- Indices de `pagos`
+-- Indices de la tabla `pagos`
 --
 ALTER TABLE `pagos`
   ADD PRIMARY KEY (`id`),
@@ -479,7 +565,7 @@ ALTER TABLE `pagos`
   ADD KEY `idx_pagos_pedido` (`pedido_id`);
 
 --
--- Indices de `pedidos`
+-- Indices de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
   ADD PRIMARY KEY (`id`),
@@ -488,7 +574,7 @@ ALTER TABLE `pedidos`
   ADD KEY `idx_pedidos_estado` (`estado_id`);
 
 --
--- Indices de `pedido_detalles`
+-- Indices de la tabla `pedido_detalles`
 --
 ALTER TABLE `pedido_detalles`
   ADD PRIMARY KEY (`id`),
@@ -496,7 +582,7 @@ ALTER TABLE `pedido_detalles`
   ADD KEY `idx_pedido_det_pedido` (`pedido_id`);
 
 --
--- Indices de `productos`
+-- Indices de la tabla `productos`
 --
 ALTER TABLE `productos`
   ADD PRIMARY KEY (`id`),
@@ -506,14 +592,14 @@ ALTER TABLE `productos`
   ADD KEY `idx_productos_marca` (`marca_id`);
 
 --
--- Indices de `producto_imagenes`
+-- Indices de la tabla `producto_imagenes`
 --
 ALTER TABLE `producto_imagenes`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_img_prod` (`producto_id`);
 
 --
--- Indices de `producto_proveedor`
+-- Indices de la tabla `producto_proveedor`
 --
 ALTER TABLE `producto_proveedor`
   ADD PRIMARY KEY (`id`),
@@ -521,14 +607,14 @@ ALTER TABLE `producto_proveedor`
   ADD KEY `fk_pp_prov` (`proveedor_id`);
 
 --
--- Indices de `promociones`
+-- Indices de la tabla `promociones`
 --
 ALTER TABLE `promociones`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_promo_estado` (`estado_id`);
 
 --
--- Indices de `promocion_productos`
+-- Indices de la tabla `promocion_productos`
 --
 ALTER TABLE `promocion_productos`
   ADD PRIMARY KEY (`id`),
@@ -536,14 +622,14 @@ ALTER TABLE `promocion_productos`
   ADD KEY `fk_pp2_prod` (`producto_id`);
 
 --
--- Indices de `proveedores`
+-- Indices de la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_prov_estado` (`estado_id`);
 
 --
--- Indices de `resenas`
+-- Indices de la tabla `resenas`
 --
 ALTER TABLE `resenas`
   ADD PRIMARY KEY (`id`),
@@ -552,28 +638,28 @@ ALTER TABLE `resenas`
   ADD KEY `idx_resenas_producto` (`producto_id`);
 
 --
--- Indices de `roles`
+-- Indices de la tabla `roles`
 --
 ALTER TABLE `roles`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uq_rol` (`nombre`);
 
 --
--- Indices de `stock_productos`
+-- Indices de la tabla `stock_productos`
 --
 ALTER TABLE `stock_productos`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uq_stock_prod` (`producto_id`);
 
 --
--- Indices de `subcategorias`
+-- Indices de la tabla `subcategorias`
 --
 ALTER TABLE `subcategorias`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_subcat_cat` (`categoria_id`);
 
 --
--- Indices de `telefonos_proveedores`
+-- Indices de la tabla `telefonos_proveedores`
 --
 ALTER TABLE `telefonos_proveedores`
   ADD PRIMARY KEY (`id`),
@@ -581,7 +667,7 @@ ALTER TABLE `telefonos_proveedores`
   ADD KEY `fk_telprov_tipo` (`tipo_telefono_id`);
 
 --
--- Indices de `telefonos_usuarios`
+-- Indices de la tabla `telefonos_usuarios`
 --
 ALTER TABLE `telefonos_usuarios`
   ADD PRIMARY KEY (`id`),
@@ -589,14 +675,14 @@ ALTER TABLE `telefonos_usuarios`
   ADD KEY `fk_teluser_tipo` (`tipo_telefono_id`);
 
 --
--- Indices de `tipos_telefono`
+-- Indices de la tabla `tipos_telefono`
 --
 ALTER TABLE `tipos_telefono`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uq_tipo_tel` (`nombre`);
 
 --
--- Indices de `users`
+-- Indices de la tabla `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
@@ -605,208 +691,208 @@ ALTER TABLE `users`
   ADD KEY `fk_user_estado` (`estado_id`);
 
 --
--- Auto increment de las tablas
+-- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- Auto incremental para `carritos`
+-- AUTO_INCREMENT de la tabla `carritos`
 --
 ALTER TABLE `carritos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Auto incremental para `carrito_detalles`
+-- AUTO_INCREMENT de la tabla `carrito_detalles`
 --
 ALTER TABLE `carrito_detalles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Auto incremental para `catalogos`
+-- AUTO_INCREMENT de la tabla `catalogos`
 --
 ALTER TABLE `catalogos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
--- Auto incremental para `categorias`
+-- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- Auto incremental para `envios`
+-- AUTO_INCREMENT de la tabla `envios`
 --
 ALTER TABLE `envios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Auto incremental para `marcas`
+-- AUTO_INCREMENT de la tabla `marcas`
 --
 ALTER TABLE `marcas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- Auto incremental para `movimientos_stock`
+-- AUTO_INCREMENT de la tabla `movimientos_stock`
 --
 ALTER TABLE `movimientos_stock`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Auto incremental para `pagos`
+-- AUTO_INCREMENT de la tabla `pagos`
 --
 ALTER TABLE `pagos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Auto incremental para `pedidos`
+-- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Auto incremental para `pedido_detalles`
+-- AUTO_INCREMENT de la tabla `pedido_detalles`
 --
 ALTER TABLE `pedido_detalles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Auto incremental para `productos`
+-- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- Auto incremental para `producto_imagenes`
+-- AUTO_INCREMENT de la tabla `producto_imagenes`
 --
 ALTER TABLE `producto_imagenes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Auto incremental para `producto_proveedor`
+-- AUTO_INCREMENT de la tabla `producto_proveedor`
 --
 ALTER TABLE `producto_proveedor`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Auto incremental para `promociones`
+-- AUTO_INCREMENT de la tabla `promociones`
 --
 ALTER TABLE `promociones`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Auto incremental para `promocion_productos`
+-- AUTO_INCREMENT de la tabla `promocion_productos`
 --
 ALTER TABLE `promocion_productos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Auto incremental para `proveedores`
+-- AUTO_INCREMENT de la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- Auto incremental para `resenas`
+-- AUTO_INCREMENT de la tabla `resenas`
 --
 ALTER TABLE `resenas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Auto incremental para `roles`
+-- AUTO_INCREMENT de la tabla `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
--- Auto incremental para `stock_productos`
+-- AUTO_INCREMENT de la tabla `stock_productos`
 --
 ALTER TABLE `stock_productos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Auto incremental para `subcategorias`
+-- AUTO_INCREMENT de la tabla `subcategorias`
 --
 ALTER TABLE `subcategorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- Auto incremental para `telefonos_proveedores`
+-- AUTO_INCREMENT de la tabla `telefonos_proveedores`
 --
 ALTER TABLE `telefonos_proveedores`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Auto incremental para `telefonos_usuarios`
+-- AUTO_INCREMENT de la tabla `telefonos_usuarios`
 --
 ALTER TABLE `telefonos_usuarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Auto incremental para `tipos_telefono`
+-- AUTO_INCREMENT de la tabla `tipos_telefono`
 --
 ALTER TABLE `tipos_telefono`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- Auto incremental para `users`
+-- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Llaves foraneas y relaciones entre tablas
+-- Restricciones para tablas volcadas
 --
 
 --
--- Relaciones de `carritos`
+-- Filtros para la tabla `carritos`
 --
 ALTER TABLE `carritos`
   ADD CONSTRAINT `fk_carrito_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`),
   ADD CONSTRAINT `fk_carrito_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Relaciones de `carrito_detalles`
+-- Filtros para la tabla `carrito_detalles`
 --
 ALTER TABLE `carrito_detalles`
   ADD CONSTRAINT `fk_cd_carrito` FOREIGN KEY (`carrito_id`) REFERENCES `carritos` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_cd_prod` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`);
 
 --
--- Relaciones de `envios`
+-- Filtros para la tabla `envios`
 --
 ALTER TABLE `envios`
   ADD CONSTRAINT `fk_env_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`),
   ADD CONSTRAINT `fk_env_pedido` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`);
 
 --
--- Relaciones de `movimientos_stock`
+-- Filtros para la tabla `movimientos_stock`
 --
 ALTER TABLE `movimientos_stock`
   ADD CONSTRAINT `fk_mov_prod` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`),
   ADD CONSTRAINT `fk_mov_tipo` FOREIGN KEY (`tipo_movimiento_id`) REFERENCES `catalogos` (`id`);
 
 --
--- Relaciones de `pagos`
+-- Filtros para la tabla `pagos`
 --
 ALTER TABLE `pagos`
   ADD CONSTRAINT `fk_pago_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`),
   ADD CONSTRAINT `fk_pago_pedido` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`);
 
 --
--- Relaciones de `pedidos`
+-- Filtros para la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
   ADD CONSTRAINT `fk_ped_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`),
   ADD CONSTRAINT `fk_ped_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Relaciones de `pedido_detalles`
+-- Filtros para la tabla `pedido_detalles`
 --
 ALTER TABLE `pedido_detalles`
   ADD CONSTRAINT `fk_pdet_ped` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_pdet_prod` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`);
 
 --
--- Relaciones de `productos`
+-- Filtros para la tabla `productos`
 --
 ALTER TABLE `productos`
   ADD CONSTRAINT `fk_prod_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`),
@@ -814,39 +900,39 @@ ALTER TABLE `productos`
   ADD CONSTRAINT `fk_prod_subcat` FOREIGN KEY (`subcategoria_id`) REFERENCES `subcategorias` (`id`);
 
 --
--- Relaciones de `producto_imagenes`
+-- Filtros para la tabla `producto_imagenes`
 --
 ALTER TABLE `producto_imagenes`
   ADD CONSTRAINT `fk_img_prod` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE CASCADE;
 
 --
--- Relaciones de `producto_proveedor`
+-- Filtros para la tabla `producto_proveedor`
 --
 ALTER TABLE `producto_proveedor`
   ADD CONSTRAINT `fk_pp_prod` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`),
   ADD CONSTRAINT `fk_pp_prov` FOREIGN KEY (`proveedor_id`) REFERENCES `proveedores` (`id`);
 
 --
--- Relaciones de `promociones`
+-- Filtros para la tabla `promociones`
 --
 ALTER TABLE `promociones`
   ADD CONSTRAINT `fk_promo_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`);
 
 --
--- Relaciones de `promocion_productos`
+-- Filtros para la tabla `promocion_productos`
 --
 ALTER TABLE `promocion_productos`
   ADD CONSTRAINT `fk_pp2_prod` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`),
   ADD CONSTRAINT `fk_pp2_promo` FOREIGN KEY (`promocion_id`) REFERENCES `promociones` (`id`) ON DELETE CASCADE;
 
 --
--- Relaciones de `proveedores`
+-- Filtros para la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
   ADD CONSTRAINT `fk_prov_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`);
 
 --
--- Relaciones de `resenas`
+-- Filtros para la tabla `resenas`
 --
 ALTER TABLE `resenas`
   ADD CONSTRAINT `fk_res_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`),
@@ -854,33 +940,33 @@ ALTER TABLE `resenas`
   ADD CONSTRAINT `fk_res_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Relaciones de `stock_productos`
+-- Filtros para la tabla `stock_productos`
 --
 ALTER TABLE `stock_productos`
   ADD CONSTRAINT `fk_stock_prod` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`);
 
 --
--- Relaciones de `subcategorias`
+-- Filtros para la tabla `subcategorias`
 --
 ALTER TABLE `subcategorias`
   ADD CONSTRAINT `fk_subcat_cat` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`);
 
 --
--- Relaciones de `telefonos_proveedores`
+-- Filtros para la tabla `telefonos_proveedores`
 --
 ALTER TABLE `telefonos_proveedores`
   ADD CONSTRAINT `fk_telprov_prov` FOREIGN KEY (`proveedor_id`) REFERENCES `proveedores` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_telprov_tipo` FOREIGN KEY (`tipo_telefono_id`) REFERENCES `tipos_telefono` (`id`);
 
 --
--- Relaciones de `telefonos_usuarios`
+-- Filtros para la tabla `telefonos_usuarios`
 --
 ALTER TABLE `telefonos_usuarios`
   ADD CONSTRAINT `fk_teluser_tipo` FOREIGN KEY (`tipo_telefono_id`) REFERENCES `tipos_telefono` (`id`),
   ADD CONSTRAINT `fk_teluser_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
--- Relaciones de `users`
+-- Filtros para la tabla `users`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `fk_user_estado` FOREIGN KEY (`estado_id`) REFERENCES `catalogos` (`id`),
