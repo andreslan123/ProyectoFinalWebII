@@ -3,9 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
-
--- Tiempo de generación: 09-06-2026 a las 20:53:51
-
+-- Tiempo de generación: 09-06-2026 a las 21:21:33
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -46,7 +44,8 @@ CREATE TABLE `carrito_detalles` (
   `id` int(11) NOT NULL,
   `carrito_id` int(11) NOT NULL,
   `producto_id` int(11) NOT NULL,
-  `cantidad` int(11) NOT NULL DEFAULT 1
+  `cantidad` int(11) NOT NULL DEFAULT 1,
+  `precio_unitario` decimal(12,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -119,16 +118,16 @@ CREATE TABLE `categorias` (
 --
 
 INSERT INTO `categorias` (`id`, `nombre`) VALUES
-(4, 'Accesorios'),
-(7, 'Audifonos'),
-(10, 'Camaras'),
-(2, 'Celulares'),
-(5, 'Impresoras'),
-(1, 'Laptops'),
-(3, 'Monitores'),
-(9, 'Mouse'),
-(6, 'Tablets'),
-(8, 'Teclados');
+(10, 'Accesorios'),
+(5, 'Direccion'),
+(9, 'Filtros'),
+(2, 'Frenos'),
+(7, 'Iluminacion'),
+(8, 'Lubricantes'),
+(1, 'Motores'),
+(6, 'Sistema Electrico'),
+(3, 'Suspension'),
+(4, 'Transmision');
 
 -- --------------------------------------------------------
 
@@ -164,16 +163,16 @@ CREATE TABLE `marcas` (
 --
 
 INSERT INTO `marcas` (`id`, `nombre`) VALUES
-(5, 'Acer'),
-(7, 'Apple'),
-(4, 'Asus'),
-(2, 'Dell'),
-(1, 'HP'),
-(3, 'Lenovo'),
-(9, 'Logitech'),
-(6, 'Samsung'),
-(10, 'Sony'),
-(8, 'Xiaomi');
+(4, 'Chevrolet'),
+(5, 'Ford'),
+(2, 'Honda'),
+(6, 'Hyundai'),
+(7, 'Kia'),
+(8, 'Mazda'),
+(3, 'Nissan'),
+(10, 'Suzuki'),
+(1, 'Toyota'),
+(9, 'Volkswagen');
 
 -- --------------------------------------------------------
 
@@ -232,6 +231,7 @@ CREATE TABLE `pedido_detalles` (
   `pedido_id` int(11) NOT NULL,
   `producto_id` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL DEFAULT 1,
+  `precio_unitario` decimal(12,2) NOT NULL DEFAULT 0.00,
   `subtotal` decimal(14,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -258,16 +258,16 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`id`, `subcategoria_id`, `marca_id`, `estado_id`, `codigo`, `nombre`, `descripcion`, `precio_compra`, `precio_venta`) VALUES
-(1, 4, 7, 1, 'PROD1', 'Producto 1', 'Descripcion del producto 1', 496.00, 803.00),
-(2, 7, 7, 1, 'PROD2', 'Producto 2', 'Descripcion del producto 2', 195.00, 752.00),
-(3, 8, 3, 1, 'PROD3', 'Producto 3', 'Descripcion del producto 3', 208.00, 1382.00),
-(4, 7, 1, 1, 'PROD4', 'Producto 4', 'Descripcion del producto 4', 282.00, 919.00),
-(5, 9, 6, 1, 'PROD5', 'Producto 5', 'Descripcion del producto 5', 236.00, 904.00),
-(6, 1, 5, 1, 'PROD6', 'Producto 6', 'Descripcion del producto 6', 201.00, 1427.00),
-(7, 5, 10, 1, 'PROD7', 'Producto 7', 'Descripcion del producto 7', 100.00, 1234.00),
-(8, 2, 1, 1, 'PROD8', 'Producto 8', 'Descripcion del producto 8', 357.00, 1275.00),
-(9, 5, 7, 1, 'PROD9', 'Producto 9', 'Descripcion del producto 9', 332.00, 738.00),
-(10, 1, 9, 1, 'PROD10', 'Producto 10', 'Descripcion del producto 10', 430.00, 641.00);
+(1, 1, 1, 1, 'AUT001', 'Piston Toyota Corolla', 'Piston original Toyota', 120.00, 180.00),
+(2, 2, 2, 1, 'AUT002', 'Culata Honda Civic', 'Culata completa Honda', 300.00, 450.00),
+(3, 3, 3, 1, 'AUT003', 'Pastillas de Freno Nissan', 'Juego completo', 50.00, 90.00),
+(4, 4, 4, 1, 'AUT004', 'Disco de Freno Chevrolet', 'Disco delantero', 80.00, 130.00),
+(5, 5, 5, 1, 'AUT005', 'Amortiguador Ford', 'Amortiguador trasero', 110.00, 170.00),
+(6, 6, 6, 1, 'AUT006', 'Kit Embrague Hyundai', 'Kit completo', 220.00, 320.00),
+(7, 7, 7, 1, 'AUT007', 'Rotula Kia', 'Rotula superior', 40.00, 75.00),
+(8, 8, 8, 1, 'AUT008', 'Bateria Mazda', 'Bateria 12V', 100.00, 160.00),
+(9, 9, 9, 1, 'AUT009', 'Faro Volkswagen', 'Faro delantero', 90.00, 145.00),
+(10, 10, 10, 1, 'AUT010', 'Filtro Aceite Suzuki', 'Filtro original', 20.00, 45.00);
 
 -- --------------------------------------------------------
 
@@ -346,16 +346,16 @@ CREATE TABLE `proveedores` (
 --
 
 INSERT INTO `proveedores` (`id`, `estado_id`, `nombre_empresa`, `nit`, `correo`, `direccion`) VALUES
-(1, 1, 'Tech Bolivia', '100001', 'tech1@gmail.com', 'La Paz'),
-(2, 1, 'Digital Store', '100002', 'tech2@gmail.com', 'Santa Cruz'),
-(3, 1, 'CompuCenter', '100003', 'tech3@gmail.com', 'Cochabamba'),
-(4, 1, 'MegaPC', '100004', 'tech4@gmail.com', 'Oruro'),
-(5, 1, 'ElectroNet', '100005', 'tech5@gmail.com', 'Tarija'),
-(6, 1, 'InfoWorld', '100006', 'tech6@gmail.com', 'Beni'),
-(7, 1, 'Smart Import', '100007', 'tech7@gmail.com', 'Pando'),
-(8, 1, 'Digital Plus', '100008', 'tech8@gmail.com', 'La Paz'),
-(9, 1, 'Tech Global', '100009', 'tech9@gmail.com', 'Santa Cruz'),
-(10, 1, 'Importadora Uno', '100010', 'tech10@gmail.com', 'Cochabamba');
+(1, 1, 'AutoPartes Bolivia', '100001', 'contacto@autopartes.com', 'La Paz'),
+(2, 1, 'Motores Express', '100002', 'ventas@motores.com', 'Santa Cruz'),
+(3, 1, 'Repuestos Toyota', '100003', 'toyota@repuestos.com', 'Cochabamba'),
+(4, 1, 'Importadora Automotriz', '100004', 'importadora@gmail.com', 'Oruro'),
+(5, 1, 'Frenos Center', '100005', 'frenos@gmail.com', 'Tarija'),
+(6, 1, 'Suspension Pro', '100006', 'suspension@gmail.com', 'Beni'),
+(7, 1, 'Lubricantes Max', '100007', 'lubricantes@gmail.com', 'Pando'),
+(8, 1, 'Electric Auto', '100008', 'electric@gmail.com', 'La Paz'),
+(9, 1, 'Faros y Accesorios', '100009', 'faros@gmail.com', 'Santa Cruz'),
+(10, 1, 'Mega Repuestos', '100010', 'mega@gmail.com', 'Cochabamba');
 
 -- --------------------------------------------------------
 
@@ -423,16 +423,16 @@ CREATE TABLE `subcategorias` (
 --
 
 INSERT INTO `subcategorias` (`id`, `categoria_id`, `nombre`) VALUES
-(1, 1, 'Gaming'),
-(2, 1, 'Ultrabook'),
-(3, 2, 'Android'),
-(4, 2, 'iPhone'),
-(5, 3, '4K'),
-(6, 3, 'Curvos'),
-(7, 4, 'Teclados'),
-(8, 4, 'Mouse'),
-(9, 5, 'Laser'),
-(10, 6, 'Android Tablet');
+(1, 1, 'Pistones'),
+(2, 1, 'Culatas'),
+(3, 2, 'Pastillas de Freno'),
+(4, 2, 'Discos de Freno'),
+(5, 3, 'Amortiguadores'),
+(6, 4, 'Embragues'),
+(7, 5, 'Rotulas'),
+(8, 6, 'Baterias'),
+(9, 7, 'Faros'),
+(10, 9, 'Filtros de Aceite');
 
 -- --------------------------------------------------------
 
