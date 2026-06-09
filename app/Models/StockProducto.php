@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class StockProducto extends Model
 {
     use HasFactory;
+
+    protected $table = 'stock_productos';
+    protected $fillable = ['producto_id', 'cantidad_actual', 'stock_minimo', 'stock_maximo'];
 }

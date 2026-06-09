@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TipoTelefono extends Model
 {
     use HasFactory;
+
+    protected $table = 'tipos_telefono';
+    protected $fillable = ['nombre'];
 }
