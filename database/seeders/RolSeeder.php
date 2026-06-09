@@ -13,13 +13,13 @@ class RolSeeder extends Seeder
             ['nombre' => 'Administrador'],
             ['nombre' => 'Cliente'],
             ['nombre' => 'Vendedor'],
-            ['nombre' => 'Supervisor'],
-            ['nombre' => 'Gerente'],
-            ['nombre' => 'Almacen'],
-            ['nombre' => 'Marketing'],
-            ['nombre' => 'Soporte'],
-            ['nombre' => 'Contador'],
-            ['nombre' => 'Invitado']
+            ['nombre' => 'cliente'],
+            ['nombre' => 'cleinte'],
+            ['nombre' => 'cliente'],
+            ['nombre' => 'cliente'],
+            ['nombre' => 'cliente'],
+            ['nombre' => 'Vendedor'],
+            ['nombre' => 'Cliente']
         ]);
     }
 }
