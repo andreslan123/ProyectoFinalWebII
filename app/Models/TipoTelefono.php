@@ -10,5 +10,10 @@ class TipoTelefono extends Model
     use HasFactory;
 
     protected $table = 'tipos_telefono';
-    protected $fillable = ['nombre'];
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'nombre',
+    ];
 }

@@ -10,5 +10,17 @@ class StockProducto extends Model
     use HasFactory;
 
     protected $table = 'stock_productos';
-    protected $fillable = ['producto_id', 'cantidad_actual', 'stock_minimo', 'stock_maximo'];
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'producto_id',
+        'cantidad_actual',
+        'stock_minimo',
+    ];
+
+    public function producto()
+    {
+        return $this->belongsTo(Producto::class);
+    }
 }

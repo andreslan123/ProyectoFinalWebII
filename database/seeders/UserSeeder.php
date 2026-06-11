@@ -1,0 +1,136 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+class UserSeeder extends Seeder
+{
+    public function run()
+    {
+        DB::table('users')->insert([
+            [
+                'id' => 1,
+                'rol_id' => 1,
+                'estado_id' => 1,
+                'name' => 'Administrador',
+                'apellido_paterno' => 'Racing',
+                'apellido_materno' => 'Administrador',
+                'ci' => '10000001',
+                'email' => 'admin@gmail.com',
+                'password' => Hash::make('12345678'),
+                'created_at' => '2026-06-09 08:00:00',
+            ],
+            [
+                'id' => 2,
+                'rol_id' => 2,
+                'estado_id' => 1,
+                'name' => 'Carlos',
+                'apellido_paterno' => 'Mendoza',
+                'apellido_materno' => 'Lopez',
+                'ci' => '10000002',
+                'email' => 'carlos@gmail.com',
+                'password' => Hash::make('12345678'),
+                'created_at' => '2026-06-09 08:05:00',
+            ],
+            [
+                'id' => 3,
+                'rol_id' => 2,
+                'estado_id' => 1,
+                'name' => 'Maria',
+                'apellido_paterno' => 'Flores',
+                'apellido_materno' => 'Quispe',
+                'ci' => '10000003',
+                'email' => 'maria@gmail.com',
+                'password' => Hash::make('12345678'),
+                'created_at' => '2026-06-09 08:10:00',
+            ],
+            [
+                'id' => 4,
+                'rol_id' => 2,
+                'estado_id' => 1,
+                'name' => 'Jorge',
+                'apellido_paterno' => 'Aguilar',
+                'apellido_materno' => 'Mamani',
+                'ci' => '10000004',
+                'email' => 'jorge@gmail.com',
+                'password' => Hash::make('12345678'),
+                'created_at' => '2026-06-09 08:15:00',
+            ],
+            [
+                'id' => 5,
+                'rol_id' => 2,
+                'estado_id' => 1,
+                'name' => 'Lucia',
+                'apellido_paterno' => 'Vargas',
+                'apellido_materno' => 'Rojas',
+                'ci' => '10000005',
+                'email' => 'lucia@gmail.com',
+                'password' => Hash::make('12345678'),
+                'created_at' => '2026-06-09 08:20:00',
+            ],
+            [
+                'id' => 6,
+                'rol_id' => 2,
+                'estado_id' => 1,
+                'name' => 'Diego',
+                'apellido_paterno' => 'Rojas',
+                'apellido_materno' => 'Fernandez',
+                'ci' => '10000006',
+                'email' => 'diego@gmail.com',
+                'password' => Hash::make('12345678'),
+                'created_at' => '2026-06-09 08:25:00',
+            ],
+            [
+                'id' => 7,
+                'rol_id' => 2,
+                'estado_id' => 1,
+                'name' => 'Andrea',
+                'apellido_paterno' => 'Quispe',
+                'apellido_materno' => 'Condori',
+                'ci' => '10000007',
+                'email' => 'andrea@gmail.com',
+                'password' => Hash::make('12345678'),
+                'created_at' => '2026-06-09 08:30:00',
+            ],
+            [
+                'id' => 8,
+                'rol_id' => 2,
+                'estado_id' => 1,
+                'name' => 'Miguel',
+                'apellido_paterno' => 'Torres',
+                'apellido_materno' => 'Gutierrez',
+                'ci' => '10000008',
+                'email' => 'miguel@gmail.com',
+                'password' => Hash::make('12345678'),
+                'created_at' => '2026-06-09 08:35:00',
+            ],
+            [
+                'id' => 9,
+                'rol_id' => 3,
+                'estado_id' => 1,
+                'name' => 'Valeria',
+                'apellido_paterno' => 'Choque',
+                'apellido_materno' => 'Mendoza',
+                'ci' => '10000009',
+                'email' => 'valeria@gmail.com',
+                'password' => Hash::make('12345678'),
+                'created_at' => '2026-06-09 08:40:00',
+            ],
+            [
+                'id' => 10,
+                'rol_id' => 3,
+                'estado_id' => 1,
+                'name' => 'Pedro',
+                'apellido_paterno' => 'Fernandez',
+                'apellido_materno' => 'Vargas',
+                'ci' => '10000010',
+                'email' => 'pedro@gmail.com',
+                'password' => Hash::make('12345678'),
+                'created_at' => '2026-06-09 08:45:00',
+            ],
+        ]);
+    }
+}

@@ -9,14 +9,30 @@ class CarritoDetalle extends Model
 {
     use HasFactory;
 
-    protected $table = 'carrito_detalles';
+    protected $fillable = [
+        'carrito_id',
+        'producto_id',
+        'cantidad',
+    ];
 
-    // Columnas permitidas para guardar cuando agreguen cosas al carrito desde la API
-    protected $fillable = ['carrito_id', 'producto_id', 'cantidad'];
-
-    // Relación: Cada línea del detalle pertenece a un producto específico
     public function producto()
     {
         return $this->belongsTo(Producto::class);
+    }
+
+    public function carrito()
+    {
+        return $this->belongsTo(Carrito::class);
+    }
+
+    // Método accesor para obtener precio dinámico
+    public function getPrecioUnitarioAttribute()
+    {
+        return $this->producto->precio_venta ?? 0;
+    }
+
+    public function getSubtotalAttribute()
+    {
+        return $this->cantidad * $this->precio_unitario;
     }
 }

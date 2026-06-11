@@ -10,5 +10,15 @@ class Rol extends Model
     use HasFactory;
 
     protected $table = 'roles';
-    protected $fillable = ['nombre'];
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'nombre',
+    ];
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'rol_id');
+    }
 }

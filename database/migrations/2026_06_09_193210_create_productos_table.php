@@ -6,31 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
-   {
-    Schema::create('productos', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('subcategoria_id')->constrained('subcategorias')->onDelete('cascade');
-        $table->foreignId('marca_id')->constrained('marcas')->onDelete('cascade');
-        $table->integer('estado_id')->default(1);
-        $table->string('codigo_barra'); // o 'codigo' según lo definieron
-        $table->string('nombre');
-        $table->text('descripcion')->nullable();
-        $table->decimal('precio_venta', 10, 2);
-        $table->timestamps();
-    });
+    {
+        Schema::create('productos', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignId('subcategoria_id')->constrained('subcategorias');
+            $table->foreignId('marca_id')->constrained('marcas');
+            $table->foreignId('estado_id')->constrained('estados_general');
+
+            $table->string('codigo', 50)->unique();
+            $table->string('nombre', 200);
+            $table->text('descripcion')->nullable();
+
+            $table->decimal('precio_compra', 12, 2)->default(0);
+            $table->decimal('precio_venta', 12, 2)->default(0);
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('productos');

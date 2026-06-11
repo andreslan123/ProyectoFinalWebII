@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;       
-use App\Models\Producto;   
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,13 +10,38 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RolSeeder::class,
+            EstadoGeneralSeeder::class,
+
             CategoriaSeeder::class,
             MarcaSeeder::class,
             SubcategoriaSeeder::class,
-            ProveedorSeeder::class,
-        ]);
 
-        User::factory(10)->create();    
-        Producto::factory(50)->create(); 
+            UserSeeder::class,
+            ProveedorSeeder::class,
+
+            TipoTelefonoSeeder::class,
+            TelefonoUsuarioSeeder::class,
+            TelefonoProveedorSeeder::class,
+
+            ProductoSeeder::class,
+            StockProductoSeeder::class,
+            ProductoProveedorSeeder::class,
+            ProductoImagenSeeder::class,
+
+            PromocionSeeder::class,
+            PromocionProductoSeeder::class,
+
+            CarritoSeeder::class,
+            CarritoDetalleSeeder::class,
+
+            PedidoSeeder::class,
+            PedidoDetalleSeeder::class,
+
+            PagoSeeder::class,
+            EnvioSeeder::class,
+
+            MovimientoStockSeeder::class,
+            ResenaSeeder::class,
+        ]);
     }
 }

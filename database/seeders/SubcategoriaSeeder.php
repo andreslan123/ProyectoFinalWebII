@@ -9,34 +9,17 @@ class SubcategoriaSeeder extends Seeder
 {
     public function run()
     {
-        $motores = DB::table('categorias')->where('nombre', 'Motores')->value('id');
-        $frenos = DB::table('categorias')->where('nombre', 'Frenos')->value('id');
-        $suspension = DB::table('categorias')->where('nombre', 'Suspension')->value('id');
-        $transmision = DB::table('categorias')->where('nombre', 'Transmision')->value('id');
-        $direccion = DB::table('categorias')->where('nombre', 'Direccion')->value('id');
-        $electrico = DB::table('categorias')->where('nombre', 'Sistema Electrico')->value('id');
-        $iluminacion = DB::table('categorias')->where('nombre', 'Iluminacion')->value('id');
-        $filtros = DB::table('categorias')->where('nombre', 'Filtros')->value('id');
-
         DB::table('subcategorias')->insert([
-
-            ['categoria_id' => $motores, 'nombre' => 'Pistones'],
-            ['categoria_id' => $motores, 'nombre' => 'Culatas'],
-
-            ['categoria_id' => $frenos, 'nombre' => 'Pastillas de Freno'],
-            ['categoria_id' => $frenos, 'nombre' => 'Discos de Freno'],
-
-            ['categoria_id' => $suspension, 'nombre' => 'Amortiguadores'],
-
-            ['categoria_id' => $transmision, 'nombre' => 'Embragues'],
-
-            ['categoria_id' => $direccion, 'nombre' => 'Rotulas'],
-
-            ['categoria_id' => $electrico, 'nombre' => 'Baterias'],
-
-            ['categoria_id' => $iluminacion, 'nombre' => 'Faros'],
-
-            ['categoria_id' => $filtros, 'nombre' => 'Filtros de Aceite'],
+            ['id' => 1, 'categoria_id' => 1, 'nombre' => 'Aceites para motor'],
+            ['id' => 2, 'categoria_id' => 2, 'nombre' => 'Filtros de aceite'],
+            ['id' => 3, 'categoria_id' => 3, 'nombre' => 'Pastillas de freno'],
+            ['id' => 4, 'categoria_id' => 4, 'nombre' => 'Bujias'],
+            ['id' => 5, 'categoria_id' => 5, 'nombre' => 'Cadenas'],
+            ['id' => 6, 'categoria_id' => 5, 'nombre' => 'Coronas y piñones'],
+            ['id' => 7, 'categoria_id' => 6, 'nombre' => 'Llantas'],
+            ['id' => 8, 'categoria_id' => 7, 'nombre' => 'Amortiguadores'],
+            ['id' => 9, 'categoria_id' => 8, 'nombre' => 'Faros LED'],
+            ['id' => 10, 'categoria_id' => 10, 'nombre' => 'Cascos integrales'],
         ]);
     }
 }

@@ -10,5 +10,17 @@ class ProductoImagen extends Model
     use HasFactory;
 
     protected $table = 'producto_imagenes';
-    protected $fillable = ['producto_id', 'url_imagen', 'estado_id'];
+
+    public $timestamps = false;
+
+    protected $fillable = [
+    'producto_id',
+    'imagen',
+    'estado_id',
+];
+
+    public function producto()
+    {
+        return $this->belongsTo(Producto::class);
+    }
 }
