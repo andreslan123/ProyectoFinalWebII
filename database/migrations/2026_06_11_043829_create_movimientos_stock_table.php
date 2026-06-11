@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('cantidad');
             $table->text('descripcion')->nullable();
             $table->dateTime('fecha_movimiento');
+            $table->string('motivo', 255)->nullable();
             $table->timestamps();
         });
     }

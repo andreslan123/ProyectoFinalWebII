@@ -30,7 +30,6 @@ class PedidoController extends Controller
         $pedido = Pedido::create([
             'user_id' => $request->user()->id,
             'estado_id' => 9, // pendiente
-            'codigo_pedido' => 'PED-' . date('Ymd') . '-' . Str::padLeft($request->user()->id, 4, '0'),
             'fecha_pedido' => now(),
             'total' => $total
         ]);

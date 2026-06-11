@@ -11,7 +11,7 @@ class Pedido extends Model
 
     protected $table = 'pedidos';
 
-    protected $fillable = ['user_id', 'estado_id', 'codigo_pedido', 'fecha_pedido', 'total'];
+    protected $fillable = ['user_id', 'estado_id', 'fecha_pedido', 'total'];
 
     public function user()
     {

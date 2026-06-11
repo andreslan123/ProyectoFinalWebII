@@ -10,13 +10,14 @@ return new class extends Migration
     {
         Schema::create('promociones', function (Blueprint $table) {
             $table->id();
-            $table->string('titulo', 150);
+
+            $table->foreignId('estado_id')->constrained('estados_general');
+
+            $table->string('titulo', 200);
             $table->text('descripcion')->nullable();
-            $table->decimal('descuento', 10, 2)->default(0);
+            $table->decimal('valor_descuento', 12, 2)->default(0);
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
-            $table->integer('estado_id')->default(1);
-            $table->timestamps();
         });
     }
 

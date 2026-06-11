@@ -11,8 +11,14 @@ class Pago extends Model
 
     protected $table = 'pagos';
 
-    protected $fillable = ['pedido_id', 'estado_id', 'metodo_pago', 'monto', 'comprobante', 'fecha_pago'];
-
+    protected $fillable = [
+        'pedido_id',
+        'metodo_pago',
+        'monto',
+        'referencia',
+        'fecha_pago',
+        'estado_id',
+    ];
     public function pedido()
     {
         return $this->belongsTo(Pedido::class);

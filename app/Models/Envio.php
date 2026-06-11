@@ -13,7 +13,7 @@ class Envio extends Model
 
     protected $fillable = [
         'pedido_id', 'estado_id', 'metodo_envio',
-        'codigo_seguimiento', 'empresa_envio', 'costo_envio',
+        'codigo_seguimiento', 'empresa_envio', 
         'fecha_envio', 'fecha_entrega'
     ];
 

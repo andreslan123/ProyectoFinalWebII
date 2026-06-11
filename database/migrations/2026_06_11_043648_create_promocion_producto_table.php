@@ -8,16 +8,16 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('promocion_producto', function (Blueprint $table) {
+        Schema::create('promocion_productos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('promocion_id')->constrained('promociones')->onDelete('cascade');
             $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade');
-            $table->timestamps();
+            $table->foreignId('promocion_id')->constrained('promociones')->onDelete('cascade');
+            $table->foreignId('estado_id')->constrained('estados_general'); // usa estado_id según tu catálogo
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('promocion_producto');
+        Schema::dropIfExists('promocion_productos');
     }
 };

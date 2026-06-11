@@ -13,7 +13,6 @@ return new class extends Migration
             $table->foreignId('carrito_id')->constrained('carritos')->onDelete('cascade');
             $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade');
             $table->integer('cantidad')->default(1);
-            $table->decimal('precio_unitario', 10, 2);
             $table->decimal('subtotal', 10, 2)->default(0);
             $table->timestamps();
         });

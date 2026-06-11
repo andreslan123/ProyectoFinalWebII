@@ -14,10 +14,10 @@ class ProductoImagen extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'producto_id',
-        'imagen',
-        'principal',
-    ];
+    'producto_id',
+    'imagen',
+    'estado_id',
+];
 
     public function producto()
     {

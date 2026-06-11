@@ -10,10 +10,12 @@ return new class extends Migration
     {
         Schema::create('producto_imagenes', function (Blueprint $table) {
             $table->id();
+
             $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade');
-            $table->string('url_imagen');
-            $table->string('descripcion')->nullable();
-            $table->boolean('principal')->default(false);
+
+            $table->string('imagen', 500);
+            $table->foreignId('estado_id')->constrained('estados_general');
+
             $table->timestamps();
         });
     }

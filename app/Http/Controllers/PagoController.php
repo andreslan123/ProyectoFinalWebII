@@ -24,7 +24,6 @@ class PagoController extends Controller
             'estado_id' => 'required|exists:estados_general,id',
             'metodo_pago' => 'required|string|max:50',
             'monto' => 'required|numeric|min:0',
-            'comprobante' => 'nullable|string|max:500',
         ]);
 
         $pedido = Pedido::find($request->pedido_id);
@@ -58,7 +57,6 @@ class PagoController extends Controller
             'estado_id' => 'sometimes|required|exists:estados_general,id',
             'metodo_pago' => 'sometimes|required|string|max:50',
             'monto' => 'sometimes|required|numeric|min:0',
-            'comprobante' => 'nullable|string|max:500',
         ]);
 
         $pago->update($request->all());
