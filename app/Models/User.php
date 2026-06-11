@@ -24,12 +24,9 @@ class User extends Authenticatable
         'password'
     ];
 
-    // Oculta la contraseña cuando la API responda con un JSON de usuarios
     protected $hidden = [
         'password',
         'remember_token', // Añádelo por si tu migración o factory lo usan
     ];
-
-    // Como pusiste que no usas timestamps, Laravel no buscará 'created_at' ni 'updated_at'
     public $timestamps = false;
 }
