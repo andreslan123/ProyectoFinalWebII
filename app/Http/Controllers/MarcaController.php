@@ -45,10 +45,18 @@ class MarcaController extends Controller
     }
 
     // 💡 DELETE /api/marcas/{id} (Eliminar una marca)
-    public function destroy(Marca $marca)
-    {
-        $marca->delete();
+    public function destroy($id)
+{
+    $marca = Marca::find($id);
 
-        return response()->json(['message' => 'Marca eliminada con éxito'], 200);
+    if (!$marca) {
+        return response()->json(['message' => 'Marca no encontrada'], 404);
     }
+
+    // Cambiamos el estado para que no aparezca en los selects del frontend,
+    // pero se mantiene viva en la base de datos para no romper los productos.
+    $marca->update(['estado_id' => 2]); 
+
+    return response()->json(['message' => 'Marca dada de baja con éxito'], 200);
+}
 }
