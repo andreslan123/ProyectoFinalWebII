@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,27 +11,46 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    // Le decimos explícitamente qué tabla mapear
     protected $table = 'users';
 
-    // Tus campos de asignación masiva ordenados
     protected $fillable = [
-    'rol_id',
-    'estado_id',
-    'name',
-    'apellido_paterno',
-    'apellido_materno',
-    'ci',
-    'email',
-    'password'
-];
-
-    // Oculta la contraseña cuando la API responda con un JSON de usuarios
-    protected $hidden = [
+        'rol_id',
+        'estado_id',
+        'name',
+        'apellido_paterno',
+        'apellido_materno',
+        'ci',
+        'email',
         'password',
-        'remember_token', 
     ];
 
-    // Como pusiste que no usas timestamps, Laravel no buscará 'created_at' ni 'updated_at'
-    public $timestamps = false;
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'rol_id');
+    }
+
+    public function estado()
+    {
+        return $this->belongsTo(EstadoGeneral::class, 'estado_id');
+    }
+
+    public function carritos()
+    {
+        return $this->hasMany(Carrito::class);
+    }
+
+    public function pedidos()
+    {
+        return $this->hasMany(Pedido::class);
+    }
+
+    public function resenas()
+    {
+        return $this->hasMany(Resena::class);
+    }
 }

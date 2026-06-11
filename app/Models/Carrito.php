@@ -10,11 +10,14 @@ class Carrito extends Model
     use HasFactory;
 
     protected $table = 'carritos';
-    
-    // Solo permitimos llenar de forma masiva el ID del usuario dueño del carrito
-    protected $fillable = ['user_id'];
 
-    // Relación: Un carrito tiene muchos detalles (productos adentro)
+    protected $fillable = ['user_id', 'estado_id'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function detalles()
     {
         return $this->hasMany(CarritoDetalle::class);

@@ -10,8 +10,26 @@ class Pedido extends Model
     use HasFactory;
 
     protected $table = 'pedidos';
-    protected $fillable = ['user_id', 'fecha_pedido', 'total', 'estado_id'];
 
-    // Relación por si luego necesitas ver los detalles desde el pedido
-    public function detalles() { return $this->hasMany(PedidoDetalle::class); }
+    protected $fillable = ['user_id', 'estado_id', 'codigo_pedido', 'fecha_pedido', 'total'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function detalles()
+    {
+        return $this->hasMany(PedidoDetalle::class);
+    }
+
+    public function pagos()
+    {
+        return $this->hasMany(Pago::class);
+    }
+
+    public function envios()
+    {
+        return $this->hasMany(Envio::class);
+    }
 }

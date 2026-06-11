@@ -10,5 +10,15 @@ class Marca extends Model
     use HasFactory;
 
     protected $table = 'marcas';
-    protected $fillable = ['nombre', 'estado_id'];
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'nombre',
+    ];
+
+    public function productos()
+    {
+        return $this->hasMany(Producto::class);
+    }
 }
