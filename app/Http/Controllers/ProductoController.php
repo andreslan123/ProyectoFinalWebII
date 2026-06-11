@@ -21,31 +21,24 @@ class ProductoController extends Controller
 
     // Crear producto
     public function store(Request $request)
-    {
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
-            'precio' => 'required|numeric',
-            'stock' => 'required|integer',
-            'categoria_id' => 'required|exists:categorias,id',
-            'marca_id' => 'required|exists:marcas,id'
-        ]);
+{
+    // 💡 Ajustamos la validación a las columnas REALES de tu phpMyAdmin
+    $request->validate([
+        'subcategoria_id' => 'required|integer',
+        'marca_id'        => 'required|integer',
+        'estado_id'       => 'required|integer',
+        'codigo'          => 'required|string|unique:productos,codigo',
+        'nombre'          => 'required|string|max:255',
+        'descripcion'     => 'nullable|string',
+        'precio_compra'   => 'required|numeric',
+        'precio_venta'    => 'required|numeric',
+    ]);
 
-        $producto = Producto::create([
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
-            'precio' => $request->precio,
-            'stock' => $request->stock,
-            'categoria_id' => $request->categoria_id,
-            'marca_id' => $request->marca_id
-        ]);
+    // Guardamos usando el modelo
+    $producto = \App\Models\Producto::create($request->all());
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Producto creado correctamente',
-            'data' => $producto
-        ], 201);
-    }
+    return response()->json($producto, 201);
+}
 
     // Mostrar producto específico
     public function show($id)
