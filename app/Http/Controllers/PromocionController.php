@@ -2,83 +2,103 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Promocion;
 use Illuminate\Http\Request;
 
 class PromocionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        return response()->json([
+            'status' => true,
+            'data' => Promocion::with(['estado', 'productos'])->get()
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'estado_id' => 'required|exists:estados_general,id',
+            'tipo_descuento' => 'required|string|max:20|in:porcentaje,monto_fijo',
+            'titulo' => 'required|string|max:200',
+            'descripcion' => 'nullable|string',
+            'valor_descuento' => 'required|numeric|min:0',
+            'fecha_inicio' => 'required|date',
+            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
+        ]);
+
+        $promocion = Promocion::create($request->all());
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Promoción registrada correctamente',
+            'data' => $promocion
+        ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        $promocion = Promocion::with(['estado', 'productos'])->find($id);
+
+        if (!$promocion) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Promoción no encontrada'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $promocion
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $promocion = Promocion::find($id);
+
+        if (!$promocion) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Promoción no encontrada'
+            ], 404);
+        }
+
+        $request->validate([
+            'estado_id' => 'sometimes|required|exists:estados_general,id',
+            'tipo_descuento' => 'sometimes|required|string|max:20|in:porcentaje,monto_fijo',
+            'titulo' => 'sometimes|required|string|max:200',
+            'descripcion' => 'nullable|string',
+            'valor_descuento' => 'sometimes|required|numeric|min:0',
+            'fecha_inicio' => 'sometimes|required|date',
+            'fecha_fin' => 'sometimes|required|date|after_or_equal:fecha_inicio',
+        ]);
+
+        $promocion->update($request->all());
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Promoción actualizada correctamente',
+            'data' => $promocion
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        $promocion = Promocion::find($id);
+
+        if (!$promocion) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Promoción no encontrada'
+            ], 404);
+        }
+
+        $promocion->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Promoción eliminada correctamente'
+        ]);
     }
 }

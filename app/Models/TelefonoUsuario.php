@@ -17,7 +17,7 @@ class TelefonoUsuario extends Model
         'user_id',
         'tipo_telefono_id',
         'numero',
-        'principal',
+        'estado_id',
     ];
 
     public function user()

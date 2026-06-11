@@ -17,7 +17,7 @@ class TelefonoProveedor extends Model
         'proveedor_id',
         'tipo_telefono_id',
         'numero',
-        'principal',
+        'estado_id',
     ];
 
     public function proveedor()

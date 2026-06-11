@@ -10,16 +10,16 @@ class MarcaSeeder extends Seeder
     public function run()
     {
         DB::table('marcas')->insert([
-            ['nombre'=>'Toyota'],
-            ['nombre'=>'Honda'],
-            ['nombre'=>'Nissan'],
-            ['nombre'=>'Chevrolet'],
-            ['nombre'=>'Ford'],
-            ['nombre'=>'Hyundai'],
-            ['nombre'=>'Kia'],
-            ['nombre'=>'Mazda'],
-            ['nombre'=>'Volkswagen'],
-            ['nombre'=>'Suzuki']
+            ['id' => 1, 'nombre' => 'Honda'],
+            ['id' => 2, 'nombre' => 'Yamaha'],
+            ['id' => 3, 'nombre' => 'Suzuki'],
+            ['id' => 4, 'nombre' => 'Kawasaki'],
+            ['id' => 5, 'nombre' => 'Bajaj'],
+            ['id' => 6, 'nombre' => 'KTM'],
+            ['id' => 7, 'nombre' => 'TVS'],
+            ['id' => 8, 'nombre' => 'Italika'],
+            ['id' => 9, 'nombre' => 'Loncin'],
+            ['id' => 10, 'nombre' => 'NGK'],
         ]);
     }
 }
