@@ -17,17 +17,20 @@ class User extends Authenticatable
 
     // Tus campos de asignación masiva ordenados
     protected $fillable = [
-        'rol_id',
-        'estado_id',
-        'name',
-        'email',
-        'password'
-    ];
+    'rol_id',
+    'estado_id',
+    'name',
+    'apellido_paterno',
+    'apellido_materno',
+    'ci',
+    'email',
+    'password'
+];
 
     // Oculta la contraseña cuando la API responda con un JSON de usuarios
     protected $hidden = [
         'password',
-        'remember_token', // Añádelo por si tu migración o factory lo usan
+        'remember_token', 
     ];
 
     // Como pusiste que no usas timestamps, Laravel no buscará 'created_at' ni 'updated_at'

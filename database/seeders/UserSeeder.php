@@ -16,6 +16,9 @@ class UserSeeder extends Seeder
                 'rol_id' => 1,
                 'estado_id' => 1,
                 'name' => 'Administrador',
+                'apellido_paterno' => 'Racing',
+                'apellido_materno' => 'Diez',
+                'ci' => '10000001',
                 'email' => 'admin@gmail.com',
                 'password' => Hash::make('12345678')
             ],
@@ -24,6 +27,9 @@ class UserSeeder extends Seeder
                 'rol_id' => 3,
                 'estado_id' => 1,
                 'name' => 'Vendedor',
+                'apellido_paterno' => 'Principal',
+                'apellido_materno' => 'Racing',
+                'ci' => '10000002',
                 'email' => 'vendedor@gmail.com',
                 'password' => Hash::make('12345678')
             ],
@@ -31,7 +37,10 @@ class UserSeeder extends Seeder
             [
                 'rol_id' => 2,
                 'estado_id' => 1,
-                'name' => 'Carlos Perez',
+                'name' => 'Carlos',
+                'apellido_paterno' => 'Perez',
+                'apellido_materno' => 'Mendoza',
+                'ci' => '10000003',
                 'email' => 'carlos@gmail.com',
                 'password' => Hash::make('12345678')
             ],
@@ -39,7 +48,10 @@ class UserSeeder extends Seeder
             [
                 'rol_id' => 2,
                 'estado_id' => 1,
-                'name' => 'Juan Flores',
+                'name' => 'Juan',
+                'apellido_paterno' => 'Flores',
+                'apellido_materno' => 'Quispe',
+                'ci' => '10000004',
                 'email' => 'juan@gmail.com',
                 'password' => Hash::make('12345678')
             ],
@@ -47,7 +59,10 @@ class UserSeeder extends Seeder
             [
                 'rol_id' => 2,
                 'estado_id' => 1,
-                'name' => 'Maria Lopez',
+                'name' => 'Maria',
+                'apellido_paterno' => 'Lopez',
+                'apellido_materno' => 'Vargas',
+                'ci' => '10000005',
                 'email' => 'maria@gmail.com',
                 'password' => Hash::make('12345678')
             ]
