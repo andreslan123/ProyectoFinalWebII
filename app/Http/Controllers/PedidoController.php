@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Pedido;
 use App\Models\PedidoDetalle;
 use App\Models\Carrito;
+use App\Models\StockProducto;
+use App\Models\MovimientoStock;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PedidoController extends Controller
 {
@@ -45,11 +48,12 @@ class PedidoController extends Controller
     /**
      * STORE — Solo cliente (rol 2)
      * Convierte el carrito activo en un pedido.
-     * Carga los detalles con el producto para calcular el total correctamente.
+     * Descuenta el stock de cada producto y registra el movimiento.
+     * Todo dentro de una transacción para garantizar consistencia.
      */
     public function store(Request $request)
     {
-        $carrito = Carrito::with('detalles.producto')
+        $carrito = Carrito::with('detalles.producto.stock')
                           ->where('user_id', $request->user()->id)
                           ->where('estado_id', 34) // activo
                           ->first();
@@ -61,28 +65,60 @@ class PedidoController extends Controller
             ], 400);
         }
 
-        // Calcula el total con eager loading ya cargado (sin riesgo de null)
-        $total = $carrito->detalles->sum(function ($detalle) {
-            return $detalle->cantidad * ($detalle->producto->precio_venta ?? 0);
-        });
-
-        $pedido = Pedido::create([
-            'user_id'      => $request->user()->id,
-            'estado_id'    => 9, // pendiente
-            'fecha_pedido' => now(),
-            'total'        => $total
-        ]);
-
+        // Verificar stock suficiente antes de crear el pedido
         foreach ($carrito->detalles as $detalle) {
-            PedidoDetalle::create([
-                'pedido_id'   => $pedido->id,
-                'producto_id' => $detalle->producto_id,
-                'cantidad'    => $detalle->cantidad
-            ]);
+            $stock = $detalle->producto->stock;
+
+            if (!$stock || $stock->cantidad_actual < $detalle->cantidad) {
+                return response()->json([
+                    'status'  => false,
+                    'message' => "Stock insuficiente para el producto: {$detalle->producto->nombre}. " .
+                                 "Disponible: " . ($stock->cantidad_actual ?? 0) . ", solicitado: {$detalle->cantidad}"
+                ], 400);
+            }
         }
 
-        // Marcar carrito como procesado
-        $carrito->update(['estado_id' => 35]);
+        // Transacción: todo o nada
+        $pedido = DB::transaction(function () use ($carrito, $request) {
+
+            $total = $carrito->detalles->sum(function ($detalle) {
+                return $detalle->cantidad * ($detalle->producto->precio_venta ?? 0);
+            });
+
+            $pedido = Pedido::create([
+                'user_id'      => $request->user()->id,
+                'estado_id'    => 9, // pendiente
+                'fecha_pedido' => now(),
+                'total'        => $total
+            ]);
+
+            foreach ($carrito->detalles as $detalle) {
+                // Crear detalle del pedido
+                PedidoDetalle::create([
+                    'pedido_id'   => $pedido->id,
+                    'producto_id' => $detalle->producto_id,
+                    'cantidad'    => $detalle->cantidad
+                ]);
+
+                // Descontar stock
+                $stock = $detalle->producto->stock;
+                $stock->decrement('cantidad_actual', $detalle->cantidad);
+
+                // Registrar movimiento de stock
+                MovimientoStock::create([
+                    'producto_id'      => $detalle->producto_id,
+                    'tipo_movimiento'  => 'salida',
+                    'cantidad'         => $detalle->cantidad,
+                    'descripcion'      => "Venta - Pedido #{$pedido->id}",
+                    'fecha_movimiento' => now(),
+                ]);
+            }
+
+            // Marcar carrito como procesado
+            $carrito->update(['estado_id' => 35]);
+
+            return $pedido;
+        });
 
         return response()->json([
             'status'  => true,

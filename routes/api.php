@@ -35,6 +35,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    // Devuelve el usuario autenticado actual (para mantener sesión al recargar)
+    Route::get('/user', function (Request $request) {
+        return response()->json([
+            'status' => true,
+            'data'   => $request->user()->load('rol', 'estado'),
+        ]);
+    });
+
     // ----------------------------------------------------------
     // CLIENTE (rol 2) — comprar, pagar, seguir pedido, reseñar
     // ----------------------------------------------------------
