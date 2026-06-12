@@ -16,23 +16,31 @@ use App\Http\Controllers\ResenaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MarcaController;
 
+// --- RUTAS PÚBLICAS ---
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+// Nota: Podrías dejar las categorías y marcas públicas para que el cliente vea el catálogo
+Route::apiResource('categorias', CategoriaController::class)->only(['index', 'show']);
+Route::apiResource('marcas', MarcaController::class)->only(['index', 'show']);
 
-
-Route::apiResource('marcas', MarcaController::class);
-Route::apiResource('productos', ProductoController::class);
-Route::apiResource('categorias', CategoriaController::class);
-Route::apiResource('usuarios', UserController::class);
-
+// --- RUTAS PROTEGIDAS (Requieren estar logueado) ---
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::apiResource('proveedores', ProveedorController::class);
-    Route::apiResource('promociones', PromocionController::class);
+    
+    // El usuario puede gestionar su carrito y hacer pedidos
     Route::apiResource('carritos', CarritoController::class);
     Route::apiResource('pedidos', PedidoController::class);
-    Route::apiResource('pagos', PagoController::class);
-    Route::apiResource('envios', EnvioController::class);
     Route::apiResource('resenas', ResenaController::class);
+    
+    // --- RUTAS DE ADMINISTRACIÓN (Solo Rol 1) ---
+    // Aquí es donde deberías aplicar un middleware de rol si lo tienes
+    Route::middleware('check.role:1')->group(function () {
+        Route::apiResource('usuarios', UserController::class);
+        Route::apiResource('proveedores', ProveedorController::class);
+        Route::apiResource('productos', ProductoController::class); // El cliente no debe borrar productos
+        Route::apiResource('promociones', PromocionController::class);
+        Route::apiResource('pagos', PagoController::class);
+        Route::apiResource('envios', EnvioController::class);
+    });
 });

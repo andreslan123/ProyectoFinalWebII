@@ -9,12 +9,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-<<<<<<< HEAD
+
         $table->id();
         $table->string('name');
         $table->string('email')->unique();
         $table->timestamp('email_verified_at')->nullable();
-        $table->string('password');
+        $table->string('password'); 
         
         // Campos nuevos para tu proyecto
         $table->unsignedBigInteger('rol_id')->nullable(); 
@@ -23,7 +23,7 @@ return new class extends Migration
         // Campos estructurales de Laravel (¡Solo una vez!)
         $table->rememberToken();
         $table->timestamps();
-=======
+
             $table->id();
 
             $table->unsignedBigInteger('rol_id');
@@ -40,7 +40,7 @@ return new class extends Migration
 
             $table->rememberToken();
             $table->timestamps();
->>>>>>> 934b512a9c5e297e79b3d75d2833a1af769e596d
+
         });
     }
 
