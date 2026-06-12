@@ -13,6 +13,13 @@ class Pedido extends Model
 
     protected $fillable = ['user_id', 'estado_id', 'fecha_pedido', 'total'];
 
+    // Alias 'usuario' para usar en with(['usuario']) desde el controlador
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Se mantiene 'user' por si hay código que ya lo usa
     public function user()
     {
         return $this->belongsTo(User::class);

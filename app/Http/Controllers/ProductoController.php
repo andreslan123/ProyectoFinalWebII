@@ -7,86 +7,152 @@ use App\Models\Producto;
 
 class ProductoController extends Controller
 {
-    // Listar todos los productos con relaciones
-    public function index()
+    /**
+     * INDEX — Público (también usado por admin y vendedor)
+     * Devuelve todos los productos activos con sus relaciones.
+     *
+     * Filtros opcionales via query string:
+     *   ?buscar=freno        busca por nombre o descripción
+     *   ?marca_id=2          filtra por marca
+     *   ?subcategoria_id=5   filtra por subcategoría
+     *   ?precio_min=50       precio mínimo
+     *   ?precio_max=500      precio máximo
+     */
+    public function index(Request $request)
     {
-        $productos = Producto::with(['subcategoria', 'marca', 'stock'])->get();
+        $query = Producto::with(['subcategoria', 'marca', 'stock']);
+
+        // Búsqueda por nombre o descripción
+        if ($request->filled('buscar')) {
+            $termino = $request->buscar;
+            $query->where(function ($q) use ($termino) {
+                $q->where('nombre', 'like', '%' . $termino . '%')
+                  ->orWhere('descripcion', 'like', '%' . $termino . '%')
+                  ->orWhere('codigo', 'like', '%' . $termino . '%');
+            });
+        }
+
+        // Filtro por marca
+        if ($request->filled('marca_id')) {
+            $query->where('marca_id', $request->marca_id);
+        }
+
+        // Filtro por subcategoría
+        if ($request->filled('subcategoria_id')) {
+            $query->where('subcategoria_id', $request->subcategoria_id);
+        }
+
+        // Filtro por rango de precio
+        if ($request->filled('precio_min')) {
+            $query->where('precio_venta', '>=', $request->precio_min);
+        }
+
+        if ($request->filled('precio_max')) {
+            $query->where('precio_venta', '<=', $request->precio_max);
+        }
 
         return response()->json([
-            'status' => 'success',
+            'status'  => true,
             'message' => 'Productos obtenidos correctamente',
-            'data' => $productos
+            'data'    => $query->get()
         ], 200);
     }
 
-    // Crear producto
+    /**
+     * STORE — Solo admin
+     * Crea un producto nuevo. Valida que las FK existan en sus tablas.
+     */
     public function store(Request $request)
-{
-    // 💡 Ajustamos la validación a las columnas REALES de tu phpMyAdmin
-    $request->validate([
-        'subcategoria_id' => 'required|integer',
-        'marca_id'        => 'required|integer',
-        'estado_id'       => 'required|integer',
-        'codigo'          => 'required|string|unique:productos,codigo',
-        'nombre'          => 'required|string|max:255',
-        'descripcion'     => 'nullable|string',
-        'precio_compra'   => 'required|numeric',
-        'precio_venta'    => 'required|numeric',
-    ]);
+    {
+        $request->validate([
+            'subcategoria_id' => 'required|exists:subcategorias,id',
+            'marca_id'        => 'required|exists:marcas,id',
+            'estado_id'       => 'required|exists:estados_general,id',
+            'codigo'          => 'required|string|unique:productos,codigo',
+            'nombre'          => 'required|string|max:255',
+            'descripcion'     => 'nullable|string',
+            'precio_compra'   => 'required|numeric|min:0',
+            'precio_venta'    => 'required|numeric|min:0',
+        ]);
 
-    // Guardamos usando el modelo
-    $producto = \App\Models\Producto::create($request->all());
+        $producto = Producto::create($request->all());
 
-    return response()->json($producto, 201);
-}
+        return response()->json([
+            'status'  => true,
+            'message' => 'Producto creado correctamente',
+            'data'    => $producto->load(['subcategoria', 'marca', 'stock'])
+        ], 201);
+    }
 
-    // Mostrar producto específico
+    /**
+     * SHOW — Público
+     * Devuelve el detalle de un producto con todas sus relaciones.
+     */
     public function show($id)
     {
         $producto = Producto::with(['subcategoria', 'marca', 'stock'])->find($id);
 
         if (!$producto) {
             return response()->json([
-                'status' => 'error',
+                'status'  => false,
                 'message' => 'Producto no encontrado'
             ], 404);
         }
 
         return response()->json([
-            'status' => 'success',
-            'data' => $producto
+            'status' => true,
+            'data'   => $producto
         ], 200);
     }
 
-    // Actualizar producto
+    /**
+     * UPDATE — Solo admin
+     * Edición parcial con 'sometimes': solo valida los campos que lleguen en el request.
+     * La regla unique ignora el propio producto para no marcar conflicto al editar el mismo código.
+     */
     public function update(Request $request, $id)
     {
         $producto = Producto::find($id);
 
         if (!$producto) {
             return response()->json([
-                'status' => 'error',
+                'status'  => false,
                 'message' => 'Producto no encontrado'
             ], 404);
         }
 
+        $request->validate([
+            'subcategoria_id' => 'sometimes|required|exists:subcategorias,id',
+            'marca_id'        => 'sometimes|required|exists:marcas,id',
+            'estado_id'       => 'sometimes|required|exists:estados_general,id',
+            'codigo'          => 'sometimes|required|string|unique:productos,codigo,' . $id,
+            'nombre'          => 'sometimes|required|string|max:255',
+            'descripcion'     => 'nullable|string',
+            'precio_compra'   => 'sometimes|required|numeric|min:0',
+            'precio_venta'    => 'sometimes|required|numeric|min:0',
+        ]);
+
         $producto->update($request->all());
 
         return response()->json([
-            'status' => 'success',
+            'status'  => true,
             'message' => 'Producto actualizado correctamente',
-            'data' => $producto
+            'data'    => $producto->load(['subcategoria', 'marca', 'stock'])
         ], 200);
     }
 
-    // Eliminar producto
+    /**
+     * DESTROY — Solo admin
+     * Elimina un producto. Si tiene pedidos asociados MySQL lo bloqueará
+     * por integridad referencial — considera usar estado_id para desactivarlo en su lugar.
+     */
     public function destroy($id)
     {
         $producto = Producto::find($id);
 
         if (!$producto) {
             return response()->json([
-                'status' => 'error',
+                'status'  => false,
                 'message' => 'Producto no encontrado'
             ], 404);
         }
@@ -94,7 +160,7 @@ class ProductoController extends Controller
         $producto->delete();
 
         return response()->json([
-            'status' => 'success',
+            'status'  => true,
             'message' => 'Producto eliminado correctamente'
         ], 200);
     }
