@@ -28,10 +28,6 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-<<<<<<< HEAD
-    public $timestamps = false;
-}
-=======
 
     public function rol()
     {
@@ -58,4 +54,3 @@ class User extends Authenticatable
         return $this->hasMany(Resena::class);
     }
 }
->>>>>>> 934b512a9c5e297e79b3d75d2833a1af769e596d
