@@ -4,45 +4,84 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash; // 🔐 Fachada necesaria para encriptar y verificar contraseñas
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     /**
-     * 👁️ 1. INDEX: Listar todos los usuarios
-     * Explicación para la defensa: Retorna la colección completa de usuarios. 
-     * Usamos Eager Loading (with) para traer de un solo golpe los datos de las tablas relacionadas 
-     * (roles y estados) evitando el problema de consultas N+1 en la base de datos.
+     * INDEX — Solo admin
+     * Lista TODOS los usuarios (clientes, vendedores, admins) con filtros opcionales.
+     * Filtros: ?buscar=garcia  busca por apellido_paterno o CI
      */
-    public function index()
+    public function index(Request $request)
     {
+        $query = User::with('rol', 'estado');
+
+        if ($request->filled('buscar')) {
+            $termino = $request->buscar;
+            $query->where(function ($q) use ($termino) {
+                $q->where('apellido_paterno', 'like', '%' . $termino . '%')
+                  ->orWhere('apellido_materno', 'like', '%' . $termino . '%')
+                  ->orWhere('ci', 'like', '%' . $termino . '%')
+                  ->orWhere('name', 'like', '%' . $termino . '%');
+            });
+        }
+
+        // Filtro opcional por rol: ?rol_id=2 para ver solo clientes
+        if ($request->filled('rol_id')) {
+            $query->where('rol_id', $request->rol_id);
+        }
+
         return response()->json([
             'status' => true,
-            'data' => User::with('rol', 'estado')->get()
+            'data'   => $query->get()
         ]);
     }
 
     /**
-     * 📝 2. STORE: Registrar un nuevo usuario (Sign Up)
-     * Explicación para la defensa: Recibe los datos del formulario/API, los valida fuertemente 
-     * asegurando la integridad de llaves foráneas (:roles,id) y unicidad (unique:users).
-     * La contraseña se almacena usando Hash::make (algoritmo Bcrypt) por seguridad.
+     * CLIENTES — Solo vendedor
+     * Lista únicamente usuarios con rol_id = 2 (clientes).
+     * El vendedor puede buscar por apellido o CI para atención al cliente.
+     * Ejemplo: GET /api/clientes?buscar=quispe
+     */
+    public function clientes(Request $request)
+    {
+        $query = User::with('estado')->where('rol_id', 2);
+
+        if ($request->filled('buscar')) {
+            $termino = $request->buscar;
+            $query->where(function ($q) use ($termino) {
+                $q->where('apellido_paterno', 'like', '%' . $termino . '%')
+                  ->orWhere('apellido_materno', 'like', '%' . $termino . '%')
+                  ->orWhere('ci', 'like', '%' . $termino . '%')
+                  ->orWhere('name', 'like', '%' . $termino . '%');
+            });
+        }
+
+        return response()->json([
+            'status'   => true,
+            'message'  => 'Lista de clientes',
+            'data'     => $query->get()
+        ]);
+    }
+
+    /**
+     * STORE — Solo admin
+     * Crea un usuario con cualquier rol (admin puede crear vendedores u otros admins).
      */
     public function store(Request $request)
     {
-        // 🛡️ Reglas de validación: Si falla, Laravel frena aquí y responde los errores
         $request->validate([
-            'rol_id'           => 'required|exists:roles,id',           // Debe existir en la tabla roles
-            'estado_id'        => 'required|exists:estados_general,id', // Debe existir en la tabla estados
+            'rol_id'           => 'required|exists:roles,id',
+            'estado_id'        => 'required|exists:estados_general,id',
             'name'             => 'required|string|max:150',
             'apellido_paterno' => 'required|string|max:50',
-            'apellido_materno' => 'nullable|string|max:50',             // nullable = opcional
-            'ci'               => 'nullable|string|max:15|unique:users,ci', // No pueden haber dos CI iguales
-            'email'            => 'required|email|unique:users,email',    // No pueden haber dos correos iguales
-            'password'         => 'required|string|min:6',              // Mínimo 6 caracteres
+            'apellido_materno' => 'nullable|string|max:50',
+            'ci'               => 'nullable|string|max:15|unique:users,ci',
+            'email'            => 'required|email|unique:users,email',
+            'password'         => 'required|string|min:6',
         ]);
- 
-        // 💾 Inserción en la base de datos
+
         $user = User::create([
             'rol_id'           => $request->rol_id,
             'estado_id'        => $request->estado_id,
@@ -51,47 +90,41 @@ class UserController extends Controller
             'apellido_materno' => $request->apellido_materno,
             'ci'               => $request->ci,
             'email'            => $request->email,
-            'password'         => Hash::make($request->password), // 🔐 Encriptación obligatoria
+            'password'         => Hash::make($request->password),
         ]);
 
-        // Retorna un código HTTP 201 (Created) junto al usuario y sus relaciones cargadas
         return response()->json([
-            'status' => true,
+            'status'  => true,
             'message' => 'Usuario registrado correctamente',
-            'data' => $user->load('rol', 'estado') 
+            'data'    => $user->load('rol', 'estado')
         ], 201);
     }
 
     /**
-     * 🔍 3. SHOW: Mostrar un usuario específico por su ID
-     * Explicación para la defensa: Busca un registro por su llave primaria.
-     * Si no existe, maneja el error manualmente devolviendo un código HTTP 404 (Not Found)
-     * en lugar de romper la API.
+     * SHOW — Solo admin
+     * Muestra el detalle de un usuario por ID.
      */
     public function show($id)
     {
-        // Busca al usuario cargando sus relaciones de golpe
         $user = User::with('rol', 'estado')->find($id);
 
-        // Si el find() devuelve null, el ID no existe en la BD
         if (!$user) {
             return response()->json([
-                'status' => false,
+                'status'  => false,
                 'message' => 'Usuario no encontrado'
             ], 404);
         }
 
         return response()->json([
             'status' => true,
-            'data' => $user
+            'data'   => $user
         ]);
     }
 
     /**
-     * 🔄 4. UPDATE: Modificar datos de un usuario existente
-     * Explicación para la defensa: Aplica validaciones parciales usando 'sometimes'.
-     * Además, concatena el .' ,'.$id en las reglas 'unique' para decirle a MySQL:
-     * "Verifica que nadie más tenga este email/CI, pero ignora al usuario que estoy editando actualmente".
+     * UPDATE — Solo admin
+     * Edita datos de un usuario. 'sometimes' = solo valida el campo si viene en el request.
+     * La regla unique ignora el propio ID del usuario editado para no marcar falso conflicto.
      */
     public function update(Request $request, $id)
     {
@@ -99,48 +132,44 @@ class UserController extends Controller
 
         if (!$user) {
             return response()->json([
-                'status' => false,
+                'status'  => false,
                 'message' => 'Usuario no encontrado'
             ], 404);
         }
 
-        // Validamos. 'sometimes' significa: "si el campo viene en la petición, valídalo; si no viene, ignóralo".
         $request->validate([
             'rol_id'           => 'sometimes|required|exists:roles,id',
             'estado_id'        => 'sometimes|required|exists:estados_general,id',
             'name'             => 'sometimes|required|string|max:150',
             'apellido_paterno' => 'sometimes|required|string|max:50',
             'apellido_materno' => 'nullable|string|max:50',
-            'ci'               => 'nullable|string|max:15|unique:users,ci,' . $id,    // Ignora este ID en el chequeo
-            'email'            => 'sometimes|required|email|unique:users,email,' . $id, // Ignora este ID en el chequeo
-            'password'         => 'nullable|string|min:6', // Opcional al editar
+            'ci'               => 'nullable|string|max:15|unique:users,ci,' . $id,
+            'email'            => 'sometimes|required|email|unique:users,email,' . $id,
+            'password'         => 'nullable|string|min:6',
         ]);
 
         $data = $request->all();
 
-        // 🧠 Filtro de contraseña inteligente:
-        // filled() verifica que el campo no sea nulo, que exista, y que NO sea una cadena vacía ("").
+        // Solo re-encripta si mandaron una contraseña nueva y no está vacía
         if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password); // Si escribió una nueva clave, se encripta
+            $data['password'] = Hash::make($request->password);
         } else {
-            unset($data['password']); // Si no envió clave o mandó "", la quitamos del arreglo para conservar la actual de la BD
+            unset($data['password']);
         }
 
-        // Guarda los cambios en MySQL
         $user->update($data);
 
         return response()->json([
-            'status' => true,
+            'status'  => true,
             'message' => 'Usuario actualizado correctamente',
-            'data' => $user->load('rol', 'estado')
+            'data'    => $user->load('rol', 'estado')
         ]);
     }
 
     /**
-     * ❌ 5. DESTROY: Eliminar un usuario físicamente de la base de datos
-     * Explicación para la defensa: Ejecuta un DELETE directo en la base de datos.
-     * Nota de arquitectura: Si el usuario ya tiene llaves foráneas registradas en la tabla 'pedidos',
-     * MySQL bloqueará esta acción lanzando una QueryException (error 1451).
+     * DESTROY — Solo admin
+     * Elimina un usuario. Si tiene pedidos asociados MySQL lo bloqueará
+     * por integridad referencial — en ese caso conviene usar estado_id = 2 (inactivo) en lugar de borrar.
      */
     public function destroy($id)
     {
@@ -148,83 +177,16 @@ class UserController extends Controller
 
         if (!$user) {
             return response()->json([
-                'status' => false,
+                'status'  => false,
                 'message' => 'Usuario no encontrado'
             ], 404);
         }
 
-        // ⚠️ Borrado físico de la fila. Romperá la integridad si tiene pedidos asociados.
         $user->delete();
 
         return response()->json([
-            'status' => true,
+            'status'  => true,
             'message' => 'Usuario eliminado correctamente'
         ]);
-    }
-
-    /**
-     * 🔐 6. LOGIN: Autenticación de usuarios y emisión de Tokens (Sanctum)
-     * Explicación para la defensa: Es el endpoint que da acceso al sistema.
-     * Evalúa las credenciales en texto plano contra el hash de la BD usando Hash::check().
-     * Si todo coincide, genera un Bearer Token único para el control de sesiones sin estado (Stateless API).
-     */
-    public function login(Request $request)
-    {
-        // 1. Validamos los datos de entrada mínimos
-        $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required|string',
-        ]);
-
-        // 2. Buscamos si el correo pertenece a algún usuario
-        $user = User::where('email', $request->email)->first();
-
-        // 3. Control de acceso: Si el usuario no existe, u Hash::check da false, rebota con 401 (No Autorizado)
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'Las credenciales ingresadas son incorrectas'
-            ], 401); 
-        }
-
-        // 🚀 Control extra: Si el usuario tiene estado_id = 2 (Inactivo/Baneado), le negamos la entrada
-        if ($user->estado_id == 2) { 
-            return response()->json([
-                'status'  => false,
-                'message' => 'Este usuario se encuentra inactivo. Comuníquese con el administrador.'
-            ], 403); // 403 = Prohibido (Forbidden)
-        }
-
-        // 4. Generamos el token de seguridad único usando la librería interna Laravel Sanctum
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        // 🧠 LÓGICA DE REDIRECCIÓN EN EL FRONTEND:
-        // Definimos una ruta por defecto en base al rol_id para ahorrarle lógica pesada al frontend.
-        $redirectTo = '/home'; 
-
-        if ($user->rol_id == 1) {
-            $redirectTo = '/admin/dashboard'; // Rol 1 va al panel de control total de administrador
-        } elseif ($user->rol_id == 3) {
-            $redirectTo = '/vendedor/ventas';  // Rol 3 va directo a la caja de facturación
-        } elseif ($user->rol_id == 2) {
-            $redirectTo = '/tienda/catalogo';  // Rol 2 (Cliente externo) va a ver los productos disponibles
-        }
-
-        // 5. Respondemos con éxito inyectando el Token y la información del perfil del usuario
-        return response()->json([
-            'status'       => true,
-            'message'      => '¡Bienvenido al sistema!',
-            'access_token' => $token,
-            'token_type'   => 'Bearer',
-            'redirect_to'  => $redirectTo, 
-            'user'         => [
-                'id'               => $user->id,
-                'name'             => $user->name,
-                'apellido_paterno' => $user->apellido_paterno,
-                'email'            => $user->email,
-                'rol_id'           => $user->rol_id, 
-                'rol_nombre'       => $user->rol->nombre ?? 'Sin Rol' // Trae el nombre del rol si existe la relación
-            ]
-        ], 200);
     }
 }

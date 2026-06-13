@@ -19,7 +19,7 @@ class ProductoImagenSeeder extends Seeder
             ['id'=>7,'producto_id'=>7,'imagen'=>'imagenes/productos/llanta-tubeless-9090-18.jpg','estado_id'=>4],
             ['id'=>8,'producto_id'=>8,'imagen'=>'imagenes/productos/amortiguador-trasero.jpg','estado_id'=>4],
             ['id'=>9,'producto_id'=>9,'imagen'=>'imagenes/productos/faro-led-auxiliar.jpg','estado_id'=>4],
-            ['id'=>10,'producto_id'=>10,'imagen'=>'imagenes/productos/casco-integral-racing.jpg','estado_id'=>4],
+            ['id'=>10,'producto_id'=>10,'imagen'=>'imagenes/productos/casco-integral-racing.png','estado_id'=>4],
         ]);
     }
 }
