@@ -17,19 +17,20 @@ use App\Http\Controllers\ResenaController;
 use App\Http\Controllers\AuthController;
 
 // ============================================================
-// RUTAS PÚBLICAS (sin login)
+// RUTAS PÚBLICAS (sin login — Catálogo para visitantes)
 // ============================================================
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login',    [AuthController::class, 'login']);
 
-// Catálogo visible para todos (clientes navegando sin cuenta)
+// Catálogo visible para todos (clientes navegando de forma anónima)
 Route::apiResource('categorias',  CategoriaController::class)->only(['index', 'show']);
 Route::apiResource('marcas',      MarcaController::class)->only(['index', 'show']);
 Route::apiResource('productos',   ProductoController::class)->only(['index', 'show']);
 Route::apiResource('promociones', PromocionController::class)->only(['index', 'show']);
 
+
 // ============================================================
-// RUTAS PROTEGIDAS — requieren login (cualquier rol)
+// RUTAS PROTEGIDAS — requieren login (cualquier rol válido)
 // ============================================================
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -57,44 +58,37 @@ Route::middleware('auth:sanctum')->group(function () {
     // VENDEDOR (rol 3) — gestionar ventas, sin borrar nada
     // ----------------------------------------------------------
     Route::middleware('check.role:3')->group(function () {
-        // Pedidos: ver todos + actualizar estado (ej. confirmar)
         Route::apiResource('pedidos', PedidoController::class)->only(['index', 'show', 'update']);
-
-        // Envíos: ver + actualizar estado (ej. en camino, entregado)
-        Route::apiResource('envios', EnvioController::class)->only(['index', 'show', 'update', 'store']);
-
-        // Pagos: solo ver (verificar que el cliente pagó)
-        Route::apiResource('pagos', PagoController::class)->only(['index', 'show']);
-
-        // Productos: solo ver (consultar stock, precio)
+        Route::apiResource('envios',  EnvioController::class)->only(['index', 'show', 'update', 'store']);
+        Route::apiResource('pagos',   PagoController::class)->only(['index', 'show']);
+        
+        // El vendedor sí puede listar y ver detalles dentro del ecosistema protegido
         Route::apiResource('productos', ProductoController::class)->only(['index', 'show']);
-
-        // Clientes: ver lista para atención al cliente
         Route::get('clientes', [UserController::class, 'clientes']);
     });
 
     // ----------------------------------------------------------
-    // ADMIN (rol 1) — control total
+    // ADMIN (rol 1) — control total y absoluto
     // ----------------------------------------------------------
     Route::middleware('check.role:1')->group(function () {
         // Usuarios: CRUD completo
         Route::apiResource('usuarios', UserController::class);
 
-        // Catálogo: crear, editar, borrar
-        Route::apiResource('productos',   ProductoController::class)->except(['index', 'show']);
-        Route::apiResource('categorias',  CategoriaController::class)->except(['index', 'show']);
-        Route::apiResource('marcas',      MarcaController::class)->except(['index', 'show']);
-        Route::apiResource('promociones', PromocionController::class)->except(['index', 'show']);
+        // Catálogo: ¡El admin puede hacer TODO, incluido index y show!
+        Route::apiResource('productos',   ProductoController::class);
+        Route::apiResource('categorias',  CategoriaController::class);
+        Route::apiResource('marcas',      MarcaController::class);
+        Route::apiResource('promociones', PromocionController::class);
 
         // Proveedores
         Route::apiResource('proveedores', ProveedorController::class);
 
-        // Pedidos, pagos, envíos: control total
+        // Transacciones y logística
         Route::apiResource('pedidos', PedidoController::class);
         Route::apiResource('pagos',   PagoController::class);
         Route::apiResource('envios',  EnvioController::class);
 
-        // Reseñas: el admin puede borrar reseñas inapropiadas
+        // Moderación de contenido
         Route::apiResource('resenas', ResenaController::class);
     });
 });
