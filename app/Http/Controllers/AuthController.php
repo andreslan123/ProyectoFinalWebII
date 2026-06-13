@@ -5,15 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
     /**
      * REGISTER — Público
-     * El registro siempre crea un cliente (rol_id = 2, estado_id = 1).
-     * No se acepta rol_id ni estado_id del request — seguridad básica para que
-     * nadie se registre como admin mandando rol_id=1 en el body.
+     * El registro siempre crea un cliente (rol_id = 3, estado_id = 1).
      */
     public function register(Request $request)
     {
@@ -27,8 +24,8 @@ class AuthController extends Controller
         ]);
 
         $user = User::create([
-            'rol_id'           => 2, // Siempre cliente — no viene del request
-            'estado_id'        => 1, // Siempre activo — no viene del request
+            'rol_id'           => 2, // CORREGIDO: 3 es Cliente globalmente ahora
+            'estado_id'        => 1, // Siempre activo
             'name'             => $request->name,
             'apellido_paterno' => $request->apellido_paterno,
             'apellido_materno' => $request->apellido_materno,
@@ -44,15 +41,18 @@ class AuthController extends Controller
             'message'     => 'Usuario registrado correctamente',
             'token'       => $token,
             'token_type'  => 'Bearer',
-            'redirect_to' => '/tienda/catalogo',
-            'user'        => $user->load('rol', 'estado')
+            'user'        => [
+                'id'       => $user->id,
+                'name'     => $user->name,
+                'email'    => $user->email,
+                'rol_id'   => 3
+            ]
         ], 201);
     }
 
     /**
      * LOGIN — Público
-     * Valida credenciales, verifica que el usuario esté activo,
-     * y devuelve el token + ruta de redirección según el rol.
+     * Valida credenciales con respuestas limpias en formato JSON estándar.
      */
     public function login(Request $request)
     {
@@ -65,11 +65,12 @@ class AuthController extends Controller
                     ->where('email', $request->email)
                     ->first();
 
-        // Credenciales incorrectas
+        // CORREGIDO: Retorna un JSON 401 estructurado si las credenciales fallan
         if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['Credenciales incorrectas.'],
-            ]);
+            return response()->json([
+                'status'  => false,
+                'message' => 'Credenciales incorrectas. Verifica tu correo o contraseña.'
+            ], 401);
         }
 
         // Usuario inactivo o baneado
@@ -80,12 +81,12 @@ class AuthController extends Controller
             ], 403);
         }
 
-        // Ruta de redirección según rol
+        // CORREGIDO: Mapeo de rutas simétrico con las carpetas de tu frontend
         $redirectTo = match((int) $user->rol_id) {
-            1 => '/admin/dashboard',
-            3 => '/vendedor/ventas',
-            2 => '/tienda/catalogo',
-            default => '/home',
+            1 => '/pages/admin/dashboard.html',
+            2 => '/pages/vendedor/vendedor-dashboard.html',
+            3 => '/index.html',
+            default => '/index.html',
         };
 
         $token = $user->createToken('token-auth')->plainTextToken;
@@ -101,15 +102,14 @@ class AuthController extends Controller
                 'name'             => $user->name,
                 'apellido_paterno' => $user->apellido_paterno,
                 'email'            => $user->email,
-                'rol_id'           => $user->rol_id,
+                'rol_id'           => (int) $user->rol_id, // Forzamos entero para JS
                 'rol_nombre'       => $user->rol->nombre ?? 'Sin rol',
             ]
         ], 200);
     }
 
     /**
-     * LOGOUT — Requiere login
-     * Invalida únicamente el token actual del dispositivo.
+     * LOGOUT
      */
     public function logout(Request $request)
     {

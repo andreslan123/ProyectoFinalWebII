@@ -48,62 +48,43 @@ Route::middleware('auth:sanctum')->group(function () {
         ]);
     });
 
-    // ----------------------------------------------------------
-    // RUTAS COMPARTIDAS
-    // ----------------------------------------------------------
-    
-    // Admin (1), Cliente (2) y Vendedor (3) pueden ver pedidos (el controlador filtra qué ve cada uno)
+    // Todos los roles ven pedidos (el controlador filtra)
     Route::middleware('check.role:1,2,3')->group(function () {
         Route::apiResource('pedidos', PedidoController::class)->only(['index', 'show']);
     });
 
-    // Admin (1) y Vendedor (3) pueden crear/editar productos y actualizar estados de pedidos
+    // Admin y Vendedor editan productos y actualizan pedidos
     Route::middleware('check.role:1,3')->group(function () {
         Route::apiResource('productos', ProductoController::class)->only(['store', 'update']);
         Route::apiResource('pedidos', PedidoController::class)->only(['update']);
     });
 
-    /*
-    |--------------------------------------------------------------------------
-    | CLIENTE (ROL 2)
-    |--------------------------------------------------------------------------
-    */
+    // ✅ CLIENTE (ROL 2)
     Route::middleware('check.role:2')->group(function () {
         Route::apiResource('carritos', CarritoController::class);
         Route::apiResource('pedidos', PedidoController::class)->only(['store']);
         Route::apiResource('pagos', PagoController::class)->only(['store']);
+        Route::apiResource('envios', EnvioController::class)->only(['index', 'show']); // ← cliente ve sus envíos
         Route::apiResource('resenas', ResenaController::class)->only(['index', 'store', 'show']);
     });
 
-    /*
-    |--------------------------------------------------------------------------
-    | VENDEDOR (ROL 3)
-    |--------------------------------------------------------------------------
-    */
+    // ✅ VENDEDOR (ROL 3) — antes decía rol 2, ese era el bug principal
     Route::middleware('check.role:3')->group(function () {
-        Route::apiResource('envios', EnvioController::class)->only(['index', 'show', 'update', 'store']);
+        Route::apiResource('envios', EnvioController::class)->only(['store', 'update']);
         Route::apiResource('pagos', PagoController::class)->only(['index', 'show']);
         Route::get('clientes', [UserController::class, 'clientes']);
     });
 
-    /*
-    |--------------------------------------------------------------------------
-    | ADMIN (ROL 1)
-    |--------------------------------------------------------------------------
-    */
+    // ✅ ADMIN (ROL 1)
     Route::middleware('check.role:1')->group(function () {
         Route::apiResource('usuarios', UserController::class);
         Route::apiResource('proveedores', ProveedorController::class);
-
-        // El admin puede eliminar productos, y gestionar por completo categorías, marcas y promociones
         Route::apiResource('productos', ProductoController::class)->only(['destroy']);
         Route::apiResource('categorias', CategoriaController::class)->except(['index', 'show']);
         Route::apiResource('marcas', MarcaController::class)->except(['index', 'show']);
         Route::apiResource('promociones', PromocionController::class)->except(['index', 'show']);
-
-        // Gestión de pedidos, pagos, envíos y reseñas (lo que no hacen los otros roles)
-        Route::apiResource('pedidos', PedidoController::class)->only(['store', 'destroy']);
-        Route::apiResource('pagos', PagoController::class)->except(['store']); 
+        Route::apiResource('pedidos', PedidoController::class)->only([ 'destroy']);
+        Route::apiResource('pagos', PagoController::class)->except(['store']);
         Route::apiResource('envios', EnvioController::class)->except(['index', 'show', 'update', 'store']);
         Route::apiResource('resenas', ResenaController::class)->except(['index', 'show', 'store']);
     });

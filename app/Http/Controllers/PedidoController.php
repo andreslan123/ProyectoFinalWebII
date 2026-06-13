@@ -107,9 +107,9 @@ class PedidoController extends Controller
                 // Registrar movimiento de stock
                 MovimientoStock::create([
                     'producto_id'      => $detalle->producto_id,
-                    'tipo_movimiento'  => 'salida',
+                    'tipo_movimiento'  => 'salida',   // ← campo real en BD
                     'cantidad'         => $detalle->cantidad,
-                    'descripcion'      => "Venta - Pedido #{$pedido->id}",
+                    'motivo'           => "Venta - Pedido #{$pedido->id}",  // ← descripcion → motivo
                     'fecha_movimiento' => now(),
                 ]);
             }
